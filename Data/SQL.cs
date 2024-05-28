@@ -31,7 +31,11 @@ namespace AP1_WINUI.Data
 
             var dialog2 = new MessageDialog(message);
             await dialog2.ShowAsync();
-            
+        }
+
+        public static void Disconnect()
+        {
+            Connection.Close();
         }
     }
 }
