@@ -29,7 +29,7 @@ namespace AP1_WINUI
         public App()
         {
             this.InitializeComponent();
-            //this.Suspending += OnSuspending;
+            this.Suspending += OnSuspending;
         }
 
         /// <summary>
