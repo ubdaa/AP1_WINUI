@@ -27,7 +27,6 @@ namespace AP1_WINUI
         public Login()
         {
             this.InitializeComponent();
-            Data.SQL.Connect();
             
             // on change le titre de la fenêtre
             Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = "Connexion";

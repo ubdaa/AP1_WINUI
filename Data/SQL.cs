@@ -15,7 +15,7 @@ namespace AP1_WINUI.Data
         public static MySqlConnection Connection;
         private static string ConnectionString = "server=127.0.0.1;uid=root;pwd=;database=ap1_gsb";
 
-        public static async void Connect()
+        public static async Task Connect()
         {
             string message = "";
             try 

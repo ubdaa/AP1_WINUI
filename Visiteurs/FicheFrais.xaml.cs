@@ -22,8 +22,15 @@ namespace AP1_WINUI.Visiteurs
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
+    /// 
+
     public sealed partial class FicheFrais : Page
     {
+
+        List<TypeFrais> tf = new List<TypeFrais>();
+        List<string> SourceComboBox = new List<string>();
+
+
         List<Forfait> listForfait;
 
         public FicheFrais()
@@ -31,37 +38,100 @@ namespace AP1_WINUI.Visiteurs
             this.InitializeComponent();
 
             listForfait = new List<Forfait>();
+            listForfait.Add(new Forfait() { Nom = "Nuitée" });
+            listForfait.Add(new Forfait());
+            listForfait.Add(new Forfait());
             datagridForfait.ItemsSource = listForfait.ToList();
 
 
         }
 
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            listForfait.Add(new Forfait());
-            datagridForfait.ItemsSource = listForfait.ToList();
+            tf = await Service.FraisServices.RecupTypeFrais();
+
+            foreach (TypeFrais t in tf)
+            {
+                SourceComboBox.Add(t.Nom);
+            }
+        }
+
+        #region FRAIS FORFAITS
+        private async void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout d'un forfait " + ex.Message, "Erreur");
+                await dialog.ShowAsync();
+            }
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyName == "Nom")
             {
-                List<TypeFrais> tf = Service.FraisServices.RecupTypeFrais();
-                List<string> SourceComboBox = new List<string>();
-
-                foreach (TypeFrais t in tf)
-                {
-                    SourceComboBox.Add(t.Nom);
-                }
-
-                var comboColumn = new DataGridComboBoxColumn
+                var comboColumn = new DataGridTemplateColumn
                 {
                     Header = e.PropertyName,
-                    ItemsSource = SourceComboBox
+                    CellTemplate = (DataTemplate)Resources["ComboBoxColumnTemplate"],
+                    
                 };
 
                 e.Column = comboColumn;
             }
         }
+
+        #region COMBOBOX
+
+        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            comboBox.ItemsSource = SourceComboBox;
+            comboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding
+            {
+                Path = new PropertyPath("Nom"),
+                Mode = BindingMode.TwoWay
+            }); 
+            
+            comboBox.SelectionChanged += ComboBox_SelectionChanged;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            string selectedItem = (string)comboBox.SelectedItem;
+
+            DataGridRow dataGridRow = FindParent<DataGridRow>(comboBox);
+
+            int rowIndex = dataGridRow.GetIndex();
+
+        }
+
+        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null)
+            {
+                return null;
+            }
+
+            T parent = parentObject as T;
+            if (parent != null)
+            {
+                return parent;
+            }
+            else
+            {
+                return FindParent<T>(parentObject);
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 }

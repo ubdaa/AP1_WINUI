@@ -10,11 +10,11 @@ namespace AP1_WINUI.Service
 {
     internal class FraisServices
     {
-        public static List<TypeFrais> RecupTypeFrais()
+        public static async Task<List<TypeFrais>> RecupTypeFrais()
         {
             List<TypeFrais> typeFrais = new List<TypeFrais>();
 
-            Data.SQL.Connect();
+            await Data.SQL.Connect();
             string Query = "SELECT * FROM type_frais";
             var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
 
@@ -32,9 +32,13 @@ namespace AP1_WINUI.Service
                 }
                 Data.SQL.Disconnect();
             }
-            catch
+            catch (Exception e)
             {
                 Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des types de frais " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
                 return null;
             }
 

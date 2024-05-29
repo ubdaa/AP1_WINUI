@@ -13,7 +13,7 @@ namespace AP1_WINUI.Service
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
-                Data.SQL.Connect();
+                await Data.SQL.Connect();
 
                 string query = "SELECT * FROM utilisateur WHERE username = @username AND mdp = @password";
                 var cmd = new MySqlConnector.MySqlCommand(query, Data.SQL.Connection);

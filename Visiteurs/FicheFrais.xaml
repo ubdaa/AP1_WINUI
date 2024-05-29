@@ -7,8 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
+    
+    <Page.Resources>
+        <DataTemplate x:Key="ComboBoxColumnTemplate">
+            <ComboBox Loaded="ComboBox_Loaded"/>
+        </DataTemplate>
+        <DataTemplate x:Key="CalendarColumnTemplate">
+            <ComboBox Loaded="ComboBox_Loaded"/>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
         <StackPanel>
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
