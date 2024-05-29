@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AP1_WINUI.Visiteurs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,27 @@ namespace AP1_WINUI
         public Visiteur()
         {
             this.InitializeComponent();
+        }
+
+        private void nvVisit_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
+        {
+            var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
+            string selectedItemContent = (string)selectedItem.Content;
+
+            switch (selectedItemContent)
+            {
+                case "Éditer":
+                    contentFrame.Navigate(typeof(FicheFrais));
+                    break;
+                case "Listes des fiches":
+                    contentFrame.Navigate(typeof(ListeFiches));
+                    break;
+            }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            contentFrame.Navigate(typeof(FicheFrais));
         }
     }
 }

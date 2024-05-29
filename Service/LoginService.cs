@@ -9,7 +9,7 @@ namespace AP1_WINUI.Service
 {
     internal class LoginService
     {
-        public static Utilisateur Login(string username, string password)
+        public static async Task<Utilisateur> Login(string username, string password)
         {
             if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
@@ -22,7 +22,7 @@ namespace AP1_WINUI.Service
 
                 try
                 {
-                    var reader = cmd.ExecuteReader();
+                    var reader = await cmd.ExecuteReaderAsync();
                     if (reader.Read())
                     {
                         var utilisateur = new Utilisateur
@@ -36,15 +36,17 @@ namespace AP1_WINUI.Service
                         return utilisateur;
                     }
                 }
-                catch (MySqlConnector.MySqlException e)
+                catch
                 {
-                    var dialog = new Windows.UI.Popups.MessageDialog("Erreur de connexion à la base de données : " + e.Message);
-                    dialog.ShowAsync();
-                    return null;
+                    Data.SQL.Disconnect();
                 }
 
+                var dialog = new Windows.UI.Popups.MessageDialog("Le nom d'utilisateur ou le mot de passe sont faux", "Erreur lors de la connexion");
+                await dialog.ShowAsync();
                 return null;
             }
+            var dialog2 = new Windows.UI.Popups.MessageDialog("Le nom d'utilisateur et/ou le mot de passe est vide", "Erreur lors de la connexion");
+            await dialog2.ShowAsync();
             return null;
         }
     }

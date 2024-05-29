@@ -33,10 +33,12 @@ namespace AP1_WINUI
             Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = "Connexion";
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            Utilisateur user = Service.LoginService.Login(txtUsername.Text, txtPassword.Password);
-            
+            Utilisateur user = await Service.LoginService.Login(txtUsername.Text, txtPassword.Password);
+
+            if (user == null) return;
+
             switch (user.Role)
             {
                 case Role.VISITEUR:

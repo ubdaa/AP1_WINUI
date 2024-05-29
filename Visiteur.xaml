@@ -7,14 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
 
     <Grid>
-        <muxc:NavigationView x:Name="nvSample" PaneDisplayMode="LeftCompact">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged">
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Content="Home" Icon="Home"/>
-                <muxc:NavigationViewItem Content="Favorites" Icon="Favorite"/>
-                <muxc:NavigationViewItem Content="Settings" Icon="Setting"/>
+                <muxc:NavigationViewItem Content="Éditer" Icon="Edit"/>
+                <muxc:NavigationViewItem Content="Listes des fiches" Icon="List"/>
             </muxc:NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </muxc:NavigationView>
