@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using AP1_WINUI.Data.Modeles;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -27,6 +28,21 @@ namespace AP1_WINUI
         {
             this.InitializeComponent();
             Data.SQL.Connect();
+            
+            // on change le titre de la fenêtre
+            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = "Connexion";
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            Utilisateur user = Service.LoginService.Login(txtUsername.Text, txtPassword.Password);
+            
+            switch (user.Role)
+            {
+                case Role.VISITEUR:
+                    Frame.Navigate(typeof(Visiteur));
+                    break;
+            }
         }
     }
 }

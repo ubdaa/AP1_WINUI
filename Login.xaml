@@ -5,16 +5,26 @@
     xmlns:local="using:AP1_WINUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:mtum="using:Microsoft.Toolkit.Uwp.UI.Media"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
     >
 
-    <Grid Background="#FF97A2FF" >
-        <Border BorderThickness="2" CornerRadius="10,10,10,10" Width="340" Height="490.2" BorderBrush="{ThemeResource ListBoxBorderThemeBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid >
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets\Labo.jpeg" Stretch="None" Opacity="1"></ImageBrush>
+        </Grid.Background>
+        <Border>
+            <Border.Background>
+                <mtum:BackdropBlurBrush Amount="7"/>
+            </Border.Background>
+        </Border>
+        <Border BorderThickness="2" CornerRadius="16,16,16,16" Width="340" Height="490.2" BorderBrush="{ThemeResource ScrollBarPanningBorderThemeBrush}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <StackPanel Width="300" Height="450">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,30">
-                    <Image Height="75" Width="110" HorizontalAlignment="Left" Source="/Assets/gsb.png" Margin="0,0,0,0"/>
-                    <TextBlock Text=" - Connexion" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="20" FontFamily="Bahnschrift" />
+                <StackPanel HorizontalAlignment="Center" Margin="0,0,0,30">
+                    <Image Height="90" Width="140" HorizontalAlignment="Center" Source="/Assets/gsb.png" Margin="0,0,0,0"/>
+                    <TextBlock Text="Notes de frais - Connexion" HorizontalAlignment="Center" FontSize="22" Margin="0,20,0,10" FontWeight="Bold" FontFamily="Bahnschrift"/>
                 </StackPanel>
                 <StackPanel>
                     <TextBlock Text="Nom d'utilisateur" FontSize="16" Margin="0,0,0,6"/>
@@ -24,7 +34,7 @@
                     <TextBlock Text="Mot de passe" FontSize="16" Margin="0,0,0,6"/>
                     <PasswordBox x:Name="txtPassword" PlaceholderText="Votre mot de passe" Margin="0,0,0,50"/>
                 </StackPanel>
-                <Button x:Name="btnLogin" Content="Se connecter" FontSize="16" Margin="0,0,0,20" HorizontalAlignment="Right"/>
+                <Button x:Name="btnLogin" Content="Se connecter" FontSize="16" Margin="0,0,0,0" HorizontalAlignment="Right" Click="btnLogin_Click" VerticalAlignment="Bottom"/>
             </StackPanel>
         </Border>
     </Grid>

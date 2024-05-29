@@ -27,10 +27,10 @@ namespace AP1_WINUI.Data
             catch (MySqlException e)
             {
                 message = "Erreur de connexion à la base de données : " + e.Message;
+                var dialog2 = new MessageDialog(message);
+                await dialog2.ShowAsync();
             }
 
-            var dialog2 = new MessageDialog(message);
-            await dialog2.ShowAsync();
         }
 
         public static void Disconnect()
