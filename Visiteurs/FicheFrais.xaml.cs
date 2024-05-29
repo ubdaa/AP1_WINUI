@@ -1,4 +1,5 @@
 ﻿using AP1_WINUI.Data.Modeles;
+using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,12 +32,36 @@ namespace AP1_WINUI.Visiteurs
 
             listForfait = new List<Forfait>();
             datagridForfait.ItemsSource = listForfait.ToList();
+
+
         }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
             listForfait.Add(new Forfait());
             datagridForfait.ItemsSource = listForfait.ToList();
+        }
+
+        private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "Nom")
+            {
+                List<TypeFrais> tf = Service.FraisServices.RecupTypeFrais();
+                List<string> SourceComboBox = new List<string>();
+
+                foreach (TypeFrais t in tf)
+                {
+                    SourceComboBox.Add(t.Nom);
+                }
+
+                var comboColumn = new DataGridComboBoxColumn
+                {
+                    Header = e.PropertyName,
+                    ItemsSource = SourceComboBox
+                };
+
+                e.Column = comboColumn;
+            }
         }
     }
 }

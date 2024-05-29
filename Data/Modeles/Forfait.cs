@@ -13,6 +13,13 @@ namespace AP1_WINUI.Data.Modeles
         REFUSE = 3
     }
 
+    public class TypeFrais
+    {
+        public int IdTypeFrais { get; set; }
+        public string Nom { get; set; }
+        public double Montant { get; set; }
+    }
+
     public class Forfait
     {
         public int IdForfait { get; set; }

@@ -27,7 +27,7 @@
                         <AppBarSeparator />
                     </CommandBar.PrimaryCommands>
                 </CommandBar>
-                <controls:DataGrid x:Name="datagridForfait" Height="200" AutoGenerateColumns="True" Margin="0,5,0,0" />
+                <controls:DataGrid x:Name="datagridForfait" Height="200" AutoGenerateColumns="True" Margin="0,5,0,0" AutoGeneratingColumn="datagridForfait_AutoGeneratingColumn" />
             </StackPanel>
             <StackPanel Margin="0,45,0,0">
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
