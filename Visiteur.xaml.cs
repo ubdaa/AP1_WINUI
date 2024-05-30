@@ -1,4 +1,5 @@
-﻿using AP1_WINUI.Visiteurs;
+﻿using AP1_WINUI.Service;
+using AP1_WINUI.Visiteurs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,9 +54,26 @@ namespace AP1_WINUI
             user = e.Parameter as Data.Modeles.Utilisateur;
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(typeof(FicheFrais), user);
+            Data.Modeles.FicheFrais fiche = null;
+
+            foreach (var item in user.FicheFrais)
+            {
+                if (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day == 10)
+                {
+                    fiche = item;
+                    break;
+                }
+            }
+
+            // dans le cas où on a rien trouvé
+            if (fiche == null)
+            {
+                user.FicheFrais.Add(await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 10)));
+            }
+
+            contentFrame.Navigate(typeof(FicheFrais), fiche);
         }
     }
 }

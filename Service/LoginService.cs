@@ -58,8 +58,8 @@ namespace AP1_WINUI.Service
                 {
                     var fiche = new FicheFrais
                     {
-                        IdFicheFrais = reader.GetInt32("id_fiche_frais"),
-                        Date = reader.GetDateTime("date"),
+                        IdFicheFrais = reader.GetInt32("id_fiche"),
+                        Date = reader.GetDateTime("date_fiche"),
                         IdUtilisateur = reader.GetInt32("utilisateur"),
                         Etat = (EtatFiche)reader.GetInt32("etat")
                     };

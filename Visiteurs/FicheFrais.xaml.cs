@@ -30,7 +30,7 @@ namespace AP1_WINUI.Visiteurs
 
         List<TypeFrais> tf = new List<TypeFrais>();
         List<string> SourceComboBox = new List<string>();
-        Data.Modeles.Utilisateur user;
+        Data.Modeles.FicheFrais ficheFrais;
 
         List<Forfait> listForfait;
 
@@ -61,7 +61,7 @@ namespace AP1_WINUI.Visiteurs
         {
             base.OnNavigatedTo(e);
 
-            user = e.Parameter as Data.Modeles.Utilisateur;
+            ficheFrais = e.Parameter as Data.Modeles.FicheFrais;
         }
 
         #region FRAIS FORFAITS
