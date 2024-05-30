@@ -23,6 +23,8 @@ namespace AP1_WINUI
     /// </summary>
     public sealed partial class Visiteur : Page
     {
+        Data.Modeles.Utilisateur user;
+
         public Visiteur()
         {
             this.InitializeComponent();
@@ -42,6 +44,13 @@ namespace AP1_WINUI
                     contentFrame.Navigate(typeof(ListeFiches));
                     break;
             }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            user = e.Parameter as Data.Modeles.Utilisateur;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

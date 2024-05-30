@@ -19,5 +19,6 @@ namespace AP1_WINUI.Data.Modeles
         public string Username { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
+        public List<FicheFrais> FicheFrais { get; set; }
     }
 }

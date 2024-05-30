@@ -41,7 +41,7 @@ namespace AP1_WINUI
             switch (user.Role)
             {
                 case Role.VISITEUR:
-                    Frame.Navigate(typeof(Visiteur));
+                    Frame.Navigate(typeof(Visiteur), user);
                     break;
             }
         }

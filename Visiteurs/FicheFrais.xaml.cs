@@ -62,11 +62,11 @@ namespace AP1_WINUI.Visiteurs
         {
             ContentDialog dialog = new ContentDialog();
 
+            Popups.AjoutForfait ajoutForfait = new Popups.AjoutForfait();
             {
                 dialog.Title = "Ajout d'un forfait";
                 dialog.PrimaryButtonText = "Ajouter";
                 dialog.SecondaryButtonText = "Annuler";
-                Popups.AjoutForfait ajoutForfait = new Popups.AjoutForfait();
                 ajoutForfait.comboBoxTypeFrais.ItemsSource = SourceComboBox;
                 ajoutForfait.comboBoxTypeFrais.SelectedIndex = 0;
                 dialog.Content = ajoutForfait;
@@ -74,16 +74,16 @@ namespace AP1_WINUI.Visiteurs
             }
 
             var result = await dialog.ShowAsync();
-
+            
             if (result == ContentDialogResult.Primary)
             {
-                var dialog1 = new Windows.UI.Popups.MessageDialog("Forfait ajouté", "Succès");
-                await dialog1.ShowAsync();
+                string date = ajoutForfait.datePicker.Date.ToString();
+                string content = ajoutForfait.comboBoxTypeFrais.SelectedItem.ToString();
+                var dialog2 = new Windows.UI.Popups.MessageDialog(content + " " + date, "Ajout d'un forfait");
+                await dialog2.ShowAsync();
             }
             else
             {
-                var dialog1 = new Windows.UI.Popups.MessageDialog("Rien n'a été fait", "Erreur");
-                await dialog1.ShowAsync();
             }
         }
 
@@ -114,54 +114,6 @@ namespace AP1_WINUI.Visiteurs
             }
 
         }
-
-        #region COMBOBOX
-
-        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            ComboBox comboBox = (ComboBox)sender;
-            comboBox.ItemsSource = SourceComboBox;
-            comboBox.SetBinding(ComboBox.SelectedItemProperty, new Binding
-            {
-                Path = new PropertyPath("Nom"),
-                Mode = BindingMode.TwoWay
-            }); 
-            
-            comboBox.SelectionChanged += ComboBox_SelectionChanged;
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBox comboBox = (ComboBox)sender;
-            string selectedItem = (string)comboBox.SelectedItem;
-
-            DataGridRow dataGridRow = FindParent<DataGridRow>(comboBox);
-
-            int rowIndex = dataGridRow.GetIndex();
-
-        }
-
-        private static T FindParent<T>(DependencyObject child) where T : DependencyObject
-        {
-            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-
-            if (parentObject == null)
-            {
-                return null;
-            }
-
-            T parent = parentObject as T;
-            if (parent != null)
-            {
-                return parent;
-            }
-            else
-            {
-                return FindParent<T>(parentObject);
-            }
-        }
-
-        #endregion
 
         #endregion
     }
