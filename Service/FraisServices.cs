@@ -10,6 +10,41 @@ namespace AP1_WINUI.Service
 {
     internal class FraisServices
     {
+        public static async Task<FicheFrais> RecupFicheFrais(int idUtilisateur, DateTime date)
+        {
+            FicheFrais ficheFrais = new FicheFrais();
+
+            await Data.SQL.Connect();
+            string Query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur AND date_fiche = @date";
+            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@id_utilisateur", idUtilisateur);
+            cmd.Parameters.AddWithValue("@date", date);
+
+            try
+            {
+                var reader = await cmd.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    ficheFrais.IdFicheFrais = reader.GetInt32("id_fiche");
+                    ficheFrais.Date = reader.GetDateTime("date_fiche");
+                    ficheFrais.IdUtilisateur = reader.GetInt32("utilisateur");
+                    ficheFrais.Etat = (EtatFiche)reader.GetInt32("etat");
+                }
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération de la fiche de frais " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return ficheFrais;
+        }
+
         public static async Task<FicheFrais> CreationFicheFrais(int userName, DateTime date)
         {
             FicheFrais fiches = new FicheFrais();
@@ -36,7 +71,38 @@ namespace AP1_WINUI.Service
                 return null;
             }
 
+            fiches = await RecupFicheFrais(userName, date);
+
             return fiches;
+        }
+
+        public static async Task<Forfait> AjoutForfait(int idTypeFrais, DateTime date)
+        {
+            Forfait forfait = new Forfait();
+
+            await Data.SQL.Connect();
+            string Query = "INSERT INTO forfait (type_forfait, etat, date) VALUES (@id_type_forfait, @etat, @date)";
+            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@id_type_forfait", idTypeFrais);
+            cmd.Parameters.AddWithValue("@etat", Data.Modeles.EtatNote.ACCEPTE);
+            cmd.Parameters.AddWithValue("@date", date);
+
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du forfait " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return forfait;
         }
 
         public static async Task<List<TypeFrais>> RecupTypeFrais()
@@ -72,12 +138,6 @@ namespace AP1_WINUI.Service
             }
 
             return typeFrais;
-        }
-
-        public static void AddForfaitBDD(Forfait forfait)
-        {
-            // Ajout du forfait dans la base de données
-
         }
     }
 }

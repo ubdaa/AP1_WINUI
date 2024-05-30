@@ -31,6 +31,7 @@ namespace AP1_WINUI.Visiteurs
         List<TypeFrais> tf = new List<TypeFrais>();
         List<string> SourceComboBox = new List<string>();
         Data.Modeles.FicheFrais ficheFrais;
+        bool consultation = true;
 
         List<Forfait> listForfait;
 
@@ -43,7 +44,6 @@ namespace AP1_WINUI.Visiteurs
             listForfait.Add(new Forfait());
             listForfait.Add(new Forfait());
             datagridForfait.ItemsSource = listForfait.ToList();
-
 
         }
 
@@ -85,10 +85,8 @@ namespace AP1_WINUI.Visiteurs
             
             if (result == ContentDialogResult.Primary)
             {
-                string date = ajoutForfait.datePicker.Date.ToString();
-                string content = ajoutForfait.comboBoxTypeFrais.SelectedItem.ToString();
-                var dialog2 = new Windows.UI.Popups.MessageDialog(content + " " + date, "Ajout d'un forfait");
-                await dialog2.ShowAsync();
+                DateTime date = ajoutForfait.datePicker.Date.Date;
+                int selection = ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1;
             }
             else
             {

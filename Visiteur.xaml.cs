@@ -56,6 +56,8 @@ namespace AP1_WINUI
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            nvVisit.SelectedItem = nvVisit.MenuItems[0];
+
             Data.Modeles.FicheFrais fiche = null;
 
             foreach (var item in user.FicheFrais)
@@ -69,9 +71,7 @@ namespace AP1_WINUI
 
             // dans le cas où on a rien trouvé
             if (fiche == null)
-            {
                 user.FicheFrais.Add(await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 10)));
-            }
 
             contentFrame.Navigate(typeof(FicheFrais), fiche);
         }
