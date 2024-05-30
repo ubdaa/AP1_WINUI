@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,7 +30,7 @@ namespace AP1_WINUI.Visiteurs
 
         List<TypeFrais> tf = new List<TypeFrais>();
         List<string> SourceComboBox = new List<string>();
-
+        Data.Modeles.Utilisateur user;
 
         List<Forfait> listForfait;
 
@@ -54,6 +55,13 @@ namespace AP1_WINUI.Visiteurs
             {
                 SourceComboBox.Add(t.Nom);
             }
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            user = e.Parameter as Data.Modeles.Utilisateur;
         }
 
         #region FRAIS FORFAITS

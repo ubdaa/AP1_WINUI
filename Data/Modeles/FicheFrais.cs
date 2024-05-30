@@ -20,5 +20,7 @@ namespace AP1_WINUI.Data.Modeles
         public DateTime Date { get; set; }
         public int IdUtilisateur { get; set; }
         public EtatFiche Etat { get; set; }
+        public List<Forfait> Forfaits { get; set; }
+        public List<HorsForfait> HorsForfaits { get; set; }
     }
 }

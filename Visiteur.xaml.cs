@@ -55,7 +55,7 @@ namespace AP1_WINUI
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(typeof(FicheFrais));
+            contentFrame.Navigate(typeof(FicheFrais), user);
         }
     }
 }

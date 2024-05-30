@@ -35,4 +35,18 @@ namespace AP1_WINUI.Data.Modeles
         public int Quantite { get; set; }
         public string Etat { get; set; }
     }
+
+    public class HorsForfait
+    {
+        public int IdHorsForfait { get; set; }
+        public string Nom { get; set; }
+        public DateTime _date { get; set; }
+        public string Date
+        {
+            get { return _date.ToShortDateString(); }
+            set { _date = DateTime.Parse(value); }
+        }
+        public double Montant { get; set; }
+        public string Etat { get; set; }
+    }
 }
