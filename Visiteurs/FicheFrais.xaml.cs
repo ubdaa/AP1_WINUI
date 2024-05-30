@@ -57,31 +57,62 @@ namespace AP1_WINUI.Visiteurs
         }
 
         #region FRAIS FORFAITS
+
         private async void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            ContentDialog dialog = new ContentDialog();
+
             {
+                dialog.Title = "Ajout d'un forfait";
+                dialog.PrimaryButtonText = "Ajouter";
+                dialog.SecondaryButtonText = "Annuler";
+                Popups.AjoutForfait ajoutForfait = new Popups.AjoutForfait();
+                ajoutForfait.comboBoxTypeFrais.ItemsSource = SourceComboBox;
+                ajoutForfait.comboBoxTypeFrais.SelectedIndex = 0;
+                dialog.Content = ajoutForfait;
+                dialog.DefaultButton = ContentDialogButton.Primary;
             }
-            catch (Exception ex)
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
             {
-                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout d'un forfait " + ex.Message, "Erreur");
-                await dialog.ShowAsync();
+                var dialog1 = new Windows.UI.Popups.MessageDialog("Forfait ajouté", "Succès");
+                await dialog1.ShowAsync();
+            }
+            else
+            {
+                var dialog1 = new Windows.UI.Popups.MessageDialog("Rien n'a été fait", "Erreur");
+                await dialog1.ShowAsync();
             }
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.PropertyName == "Nom")
+            switch (e.PropertyName)
             {
-                var comboColumn = new DataGridTemplateColumn
-                {
-                    Header = e.PropertyName,
-                    CellTemplate = (DataTemplate)Resources["ComboBoxColumnTemplate"],
-                    
-                };
-
-                e.Column = comboColumn;
+                case "IdForfait":
+                    e.Column.Visibility = Visibility.Collapsed;
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Date":
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "IdTypeFrais":
+                    e.Column.Visibility = Visibility.Collapsed;
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Nom":
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Montant":
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Etat":
+                    e.Column.IsReadOnly = true;
+                    break;
             }
+
         }
 
         #region COMBOBOX

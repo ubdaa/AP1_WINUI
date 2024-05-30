@@ -23,11 +23,16 @@ namespace AP1_WINUI.Data.Modeles
     public class Forfait
     {
         public int IdForfait { get; set; }
-        public DateTime Date { get; set; }
+        private DateTime _date { get; set; }
+        public string Date
+        {
+            get { return _date.ToShortDateString(); }
+            set { _date = DateTime.Parse(value); }
+        }
         public int IdTypeFrais { get; set; }
         public string Nom { get; set; }
         public double Montant { get; set; }
         public int Quantite { get; set; }
-        public EtatNote Etat { get; set; }
+        public string Etat { get; set; }
     }
 }
