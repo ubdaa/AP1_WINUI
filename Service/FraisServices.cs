@@ -15,6 +15,7 @@ namespace AP1_WINUI.Service
             FicheFrais ficheFrais = new FicheFrais();
 
             await Data.SQL.Connect();
+
             string Query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur AND date_fiche = @date";
             var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
             cmd.Parameters.AddWithValue("@id_utilisateur", idUtilisateur);
