@@ -25,7 +25,7 @@ namespace AP1_WINUI.Popups
             set { typeFrais = value; }
         }
 
-        public DatePicker datePicker
+        public CalendarDatePicker datePicker
         {
             get { return dateFrais; } 
             set { dateFrais = value; }
@@ -34,6 +34,7 @@ namespace AP1_WINUI.Popups
         public AjoutForfait()
         {
             this.InitializeComponent();
+            
         }
     }
 }

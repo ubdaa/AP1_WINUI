@@ -30,6 +30,7 @@ namespace AP1_WINUI.Service
                     ficheFrais.Date = reader.GetDateTime("date_fiche");
                     ficheFrais.IdUtilisateur = reader.GetInt32("utilisateur");
                     ficheFrais.Etat = (EtatFiche)reader.GetInt32("etat");
+                    ficheFrais.Forfaits = await RecupForfait(ficheFrais.IdFicheFrais);
                 }
                 Data.SQL.Disconnect();
             }
@@ -182,6 +183,29 @@ namespace AP1_WINUI.Service
             }
 
             return forfaits;
+        }
+
+        public static async Task<bool> SupprimerForfait(int idForfait)
+        {
+            await Data.SQL.Connect();
+            string Query = "DELETE FROM forfait WHERE id_forfait = @id_forfait";
+            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@id_forfait", idForfait);
+
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                Data.SQL.Disconnect();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression du forfait " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+                return false;
+            }
         }
     }
 }

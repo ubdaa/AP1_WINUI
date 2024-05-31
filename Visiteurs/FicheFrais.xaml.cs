@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -34,8 +35,6 @@ namespace AP1_WINUI.Visiteurs
         Data.Modeles.FicheFrais ficheFrais;
         Data.Modeles.Utilisateur utilisateur;
 
-        bool consultation = true;
-
         List<Forfait> listForfait;
 
         #region METHODES
@@ -51,6 +50,8 @@ namespace AP1_WINUI.Visiteurs
                 dialog.SecondaryButtonText = "Annuler";
                 ajoutForfait.comboBoxTypeFrais.ItemsSource = SourceComboBox;
                 ajoutForfait.comboBoxTypeFrais.SelectedIndex = 0;
+                ajoutForfait.datePicker.MinDate = new DateTime(ficheFrais.Date.Year, ficheFrais.Date.Month, 11);
+                ajoutForfait.datePicker.MaxDate = new DateTime(ficheFrais.Date.Year, ficheFrais.Date.AddMonths(1).Month, 10);
                 dialog.Content = ajoutForfait;
                 dialog.DefaultButton = ContentDialogButton.Primary;
             }
@@ -59,18 +60,42 @@ namespace AP1_WINUI.Visiteurs
 
             if (result == ContentDialogResult.Primary)
             {
-                await Service.FraisServices.AjoutForfait(ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1, ajoutForfait.datePicker.Date.Date, ficheFrais.IdFicheFrais);
+                if (ajoutForfait.datePicker.Date == null)
+                {
+                    var erreur = new Windows.UI.Popups.MessageDialog("Veuillez renseigner une date", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+                if (ajoutForfait.comboBoxTypeFrais.SelectedIndex == -1)
+                {
+                    var erreur = new Windows.UI.Popups.MessageDialog("Veuillez renseigner un type de frais", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+
+                DateTimeOffset date = (DateTimeOffset)ajoutForfait.datePicker.Date;
+                DateTime dateSelect = date.Date;
+                await Service.FraisServices.AjoutForfait(ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1, dateSelect, ficheFrais.IdFicheFrais);
             }
             else
             {
                 var annuler = new Windows.UI.Popups.MessageDialog("Rien n'a été ajouté !", "Annulation");
                 await annuler.ShowAsync();
             }
+
+            await RefreshFiche();
+            ChargerForfait();
         }
 
-        private async void ChargerForfait()
+        private async Task RefreshFiche()
         {
-             
+            ficheFrais.Forfaits = await Service.FraisServices.RecupForfait(ficheFrais.IdFicheFrais);
+        }
+
+        private void ChargerForfait()
+        {
+            datagridForfait.ItemsSource = null;
+            datagridForfait.ItemsSource = ficheFrais.Forfaits.ToList();
         }
 
         #endregion
@@ -78,10 +103,6 @@ namespace AP1_WINUI.Visiteurs
         public FicheFrais()
         {
             this.InitializeComponent();
-
-            listForfait = new List<Forfait>();
-            datagridForfait.ItemsSource = listForfait.ToList();
-
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -97,6 +118,9 @@ namespace AP1_WINUI.Visiteurs
 
             SubTitle.Text = "11 " + ficheFrais.Date.ToString("MMMM yyyy") + " - 10 " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy");
             Name.Text = "De " + utilisateur.Username + " - Fiche n°" + ficheFrais.IdFicheFrais;
+
+            await RefreshFiche();
+            ChargerForfait();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -108,9 +132,28 @@ namespace AP1_WINUI.Visiteurs
 
         #region FRAIS FORFAITS
 
-        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        private void AjouterForfait_Click(object sender, RoutedEventArgs e)
         {
             AjouterFraisForfait();
+        }
+
+        private async void SupprimerForfait(object sender, RoutedEventArgs e)
+        {
+            var forfait = (Forfait)datagridForfait.SelectedItem;
+
+            if (forfait != null)
+            {
+                await Service.FraisServices.SupprimerForfait(forfait.IdForfait);
+                await RefreshFiche();
+                ChargerForfait();
+            }
+            else
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Aucun forfait n'a été sélectionné", "Erreur");
+                await dialog.ShowAsync();
+            }
+
+            datagridForfait.SelectedIndex = -1;
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
@@ -141,5 +184,6 @@ namespace AP1_WINUI.Visiteurs
         }
 
         #endregion
+
     }
 }
