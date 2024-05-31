@@ -30,43 +30,17 @@ namespace AP1_WINUI.Visiteurs
 
         List<TypeFrais> tf = new List<TypeFrais>();
         List<string> SourceComboBox = new List<string>();
+
         Data.Modeles.FicheFrais ficheFrais;
+        Data.Modeles.Utilisateur utilisateur;
+
         bool consultation = true;
 
         List<Forfait> listForfait;
 
-        public FicheFrais()
-        {
-            this.InitializeComponent();
+        #region METHODES
 
-            listForfait = new List<Forfait>();
-            listForfait.Add(new Forfait() { Nom = "Nuitée" });
-            listForfait.Add(new Forfait());
-            listForfait.Add(new Forfait());
-            datagridForfait.ItemsSource = listForfait.ToList();
-
-        }
-
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            tf = await Service.FraisServices.RecupTypeFrais();
-
-            foreach (TypeFrais t in tf)
-            {
-                SourceComboBox.Add(t.Nom);
-            }
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-
-            ficheFrais = e.Parameter as Data.Modeles.FicheFrais;
-        }
-
-        #region FRAIS FORFAITS
-
-        private async void AppBarButton_Click(object sender, RoutedEventArgs e)
+        private async void AjouterNoteFrais()
         {
             ContentDialog dialog = new ContentDialog();
 
@@ -82,15 +56,56 @@ namespace AP1_WINUI.Visiteurs
             }
 
             var result = await dialog.ShowAsync();
-            
+
             if (result == ContentDialogResult.Primary)
             {
-                DateTime date = ajoutForfait.datePicker.Date.Date;
-                int selection = ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1;
+                await Service.FraisServices.AjoutForfait(ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1, ajoutForfait.datePicker.Date.Date, ficheFrais.IdFicheFrais);
             }
             else
             {
+                var annuler = new Windows.UI.Popups.MessageDialog("Rien n'a été ajouté !", "Annulation");
+                await annuler.ShowAsync();
             }
+        }
+
+        #endregion
+
+        public FicheFrais()
+        {
+            this.InitializeComponent();
+
+            listForfait = new List<Forfait>();
+            datagridForfait.ItemsSource = listForfait.ToList();
+
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            tf = await Service.FraisServices.RecupTypeFrais();
+
+            foreach (TypeFrais t in tf)
+            {
+                SourceComboBox.Add(t.Nom);
+            }
+
+            utilisateur = await Service.LoginService.UtilisateurBase(ficheFrais.IdUtilisateur);
+
+            SubTitle.Text = "11 " + ficheFrais.Date.ToString("MMMM yyyy") + " - 10 " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy");
+            Name.Text = "De " + utilisateur.Username + " - Fiche n°" + ficheFrais.IdFicheFrais;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ficheFrais = e.Parameter as Data.Modeles.FicheFrais;
+        }
+
+        #region FRAIS FORFAITS
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            AjouterNoteFrais();
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
@@ -118,7 +133,6 @@ namespace AP1_WINUI.Visiteurs
                     e.Column.IsReadOnly = true;
                     break;
             }
-
         }
 
         #endregion

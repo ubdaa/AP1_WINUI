@@ -77,16 +77,18 @@ namespace AP1_WINUI.Service
             return fiches;
         }
 
-        public static async Task<Forfait> AjoutForfait(int idTypeFrais, DateTime date)
+        public static async Task<Forfait> AjoutForfait(int idTypeFrais, DateTime date, int idFiche)
         {
             Forfait forfait = new Forfait();
 
             await Data.SQL.Connect();
-            string Query = "INSERT INTO forfait (type_forfait, etat, date) VALUES (@id_type_forfait, @etat, @date)";
+            string Query = "INSERT INTO forfait (type_forfait, etat, date, fiche_frais, quantite) VALUES (@id_type_forfait, @etat, @date, @fiche_frais, @quantite)";
             var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
             cmd.Parameters.AddWithValue("@id_type_forfait", idTypeFrais);
-            cmd.Parameters.AddWithValue("@etat", Data.Modeles.EtatNote.ACCEPTE);
+            cmd.Parameters.AddWithValue("@etat", EtatNote.ATTENTE);
             cmd.Parameters.AddWithValue("@date", date);
+            cmd.Parameters.AddWithValue("@fiche_frais", idFiche);
+            cmd.Parameters.AddWithValue("@quantite", 0);
 
             try
             {

@@ -24,6 +24,7 @@ namespace AP1_WINUI
     /// </summary>
     public sealed partial class Visiteur : Page
     {
+        Data.Modeles.FicheFrais fiche = null;
         Data.Modeles.Utilisateur user;
 
         public Visiteur()
@@ -39,7 +40,7 @@ namespace AP1_WINUI
             switch (selectedItemContent)
             {
                 case "Éditer":
-                    contentFrame.Navigate(typeof(FicheFrais));
+                    contentFrame.Navigate(typeof(FicheFrais), fiche);
                     break;
                 case "Listes des fiches":
                     contentFrame.Navigate(typeof(ListeFiches));
@@ -58,11 +59,9 @@ namespace AP1_WINUI
         {
             nvVisit.SelectedItem = nvVisit.MenuItems[0];
 
-            Data.Modeles.FicheFrais fiche = null;
-
             foreach (var item in user.FicheFrais)
             {
-                if (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day == 10)
+                if (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day == 11)
                 {
                     fiche = item;
                     break;
@@ -71,7 +70,7 @@ namespace AP1_WINUI
 
             // dans le cas où on a rien trouvé
             if (fiche == null)
-                user.FicheFrais.Add(await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 10)));
+                user.FicheFrais.Add(await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11)));
 
             contentFrame.Navigate(typeof(FicheFrais), fiche);
         }

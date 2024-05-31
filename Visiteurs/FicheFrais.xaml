@@ -12,8 +12,8 @@
         <StackPanel>
             <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
                 <TextBlock x:Name="Title" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Fiche frais" VerticalAlignment="Top" FontSize="72" />
-                <TextBlock x:Name="SubTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="10 mai 2024 - 9 Juin 2024" VerticalAlignment="Top" FontSize="48" />
-                <TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Pour Saff" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" />
+                <TextBlock x:Name="SubTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="48" />
+                <TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" />
             </StackPanel>
             <StackPanel Margin="0,45,0,0">
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais forfaits" VerticalAlignment="Top" FontSize="30" />

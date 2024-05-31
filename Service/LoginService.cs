@@ -43,6 +43,42 @@ namespace AP1_WINUI.Service
             return user;
         }
 
+        public static async Task<Utilisateur> UtilisateurBase(int idUtilisateur)
+        {
+            await Data.SQL.Connect();
+            Utilisateur user = null;
+
+            string query = "SELECT * FROM utilisateur WHERE id_utilisateur = @id";
+            var cmd = new MySqlConnector.MySqlCommand(query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@id", idUtilisateur);
+
+            try
+            {
+                var reader = await cmd.ExecuteReaderAsync();
+                if (reader.Read())
+                {
+                    var utilisateur = new Utilisateur
+                    {
+                        IdUtilisateur = reader.GetInt32("id_utilisateur"),
+                        Username = reader.GetString("username"),
+                        Password = reader.GetString("mdp"),
+                        Role = (Role)reader.GetInt32("id_role")
+                    };
+
+                    user = utilisateur;
+                }
+            }
+            catch
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Le nom d'utilisateur ou le mot de passe sont faux.", "Erreur lors de la connexion");
+                await dialog.ShowAsync();
+            }
+
+            Data.SQL.Disconnect();
+            return user;
+        }
+
+
         private static async Task<Utilisateur> RecupFicheFrais(Utilisateur user)
         {
             await Data.SQL.Connect();
