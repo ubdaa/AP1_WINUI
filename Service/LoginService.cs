@@ -97,7 +97,8 @@ namespace AP1_WINUI.Service
                         IdFicheFrais = reader.GetInt32("id_fiche"),
                         Date = reader.GetDateTime("date_fiche"),
                         IdUtilisateur = reader.GetInt32("utilisateur"),
-                        Etat = (EtatFiche)reader.GetInt32("etat")
+                        Etat = (EtatFiche)reader.GetInt32("etat"),
+                        Forfaits = await FraisServices.RecupForfait(reader.GetInt32("id_fiche"))
                     };
 
                     user.FicheFrais.Add(fiche);

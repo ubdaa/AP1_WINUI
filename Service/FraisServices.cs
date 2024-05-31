@@ -142,5 +142,46 @@ namespace AP1_WINUI.Service
 
             return typeFrais;
         }
+
+        public static async Task<List<Forfait>> RecupForfait(int idFiche)
+        {
+            List<Forfait> forfaits = new List<Forfait>();
+            List<TypeFrais> typeFrais = await RecupTypeFrais();
+
+            await Data.SQL.Connect();
+            string Query = "SELECT * FROM forfait WHERE fiche_frais = @id_fiche";
+            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@id_fiche", idFiche);
+
+            try
+            {
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    forfaits.Add(new Forfait
+                    {
+                        IdForfait = reader.GetInt32("id_forfait"),
+                        IdTypeFrais = reader.GetInt32("type_forfait"),
+                        Date = reader.GetDateTime("date").ToString(),
+                        Etat = reader.GetString("etat"),
+                        Quantite = reader.GetInt32("quantite"),
+                        Nom = typeFrais.Find(x => x.IdTypeFrais == reader.GetInt32("type_forfait")).Nom,
+                        Montant = typeFrais.Find(x => x.IdTypeFrais == reader.GetInt32("type_forfait")).Montant,
+                    });
+                }
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des forfaits " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return forfaits;
+        }
     }
 }

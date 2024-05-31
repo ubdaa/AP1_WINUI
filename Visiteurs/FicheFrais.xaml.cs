@@ -40,7 +40,7 @@ namespace AP1_WINUI.Visiteurs
 
         #region METHODES
 
-        private async void AjouterNoteFrais()
+        private async void AjouterFraisForfait()
         {
             ContentDialog dialog = new ContentDialog();
 
@@ -66,6 +66,11 @@ namespace AP1_WINUI.Visiteurs
                 var annuler = new Windows.UI.Popups.MessageDialog("Rien n'a été ajouté !", "Annulation");
                 await annuler.ShowAsync();
             }
+        }
+
+        private async void ChargerForfait()
+        {
+             
         }
 
         #endregion
@@ -105,7 +110,7 @@ namespace AP1_WINUI.Visiteurs
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
-            AjouterNoteFrais();
+            AjouterFraisForfait();
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
