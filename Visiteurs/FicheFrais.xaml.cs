@@ -87,6 +87,25 @@ namespace AP1_WINUI.Visiteurs
             ChargerForfait();
         }
 
+        private async void SupprimerFraisForfait()
+        {
+            var forfait = (Forfait)datagridForfait.SelectedItem;
+
+            if (forfait != null)
+            {
+                await Service.FraisServices.SupprimerForfait(forfait.IdForfait);
+                await RefreshFiche();
+                ChargerForfait();
+            }
+            else
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Aucun forfait n'a été sélectionné", "Erreur");
+                await dialog.ShowAsync();
+            }
+
+            datagridForfait.SelectedIndex = -1;
+        }
+
         private async Task RefreshFiche()
         {
             ficheFrais.Forfaits = await Service.FraisServices.RecupForfait(ficheFrais.IdFicheFrais);
@@ -95,6 +114,7 @@ namespace AP1_WINUI.Visiteurs
         private void ChargerForfait()
         {
             datagridForfait.ItemsSource = null;
+            ficheFrais.Forfaits.Sort((x, y) => x.Date.CompareTo(y.Date));
             datagridForfait.ItemsSource = ficheFrais.Forfaits.ToList();
         }
 
@@ -137,23 +157,9 @@ namespace AP1_WINUI.Visiteurs
             AjouterFraisForfait();
         }
 
-        private async void SupprimerForfait(object sender, RoutedEventArgs e)
+        private void SupprimerForfait_Click(object sender, RoutedEventArgs e)
         {
-            var forfait = (Forfait)datagridForfait.SelectedItem;
-
-            if (forfait != null)
-            {
-                await Service.FraisServices.SupprimerForfait(forfait.IdForfait);
-                await RefreshFiche();
-                ChargerForfait();
-            }
-            else
-            {
-                var dialog = new Windows.UI.Popups.MessageDialog("Aucun forfait n'a été sélectionné", "Erreur");
-                await dialog.ShowAsync();
-            }
-
-            datagridForfait.SelectedIndex = -1;
+            SupprimerFraisForfait();
         }
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
