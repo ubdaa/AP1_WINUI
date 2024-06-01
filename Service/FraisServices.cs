@@ -207,5 +207,29 @@ namespace AP1_WINUI.Service
                 return false;
             }
         }
+
+        public static async Task<bool> ModifierForfait(int idForfait, int quantite)
+        {
+            await Data.SQL.Connect();
+            string Query = "UPDATE forfait SET quantite = @quantite WHERE id_forfait = @id_forfait";
+            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
+            cmd.Parameters.AddWithValue("@quantite", quantite);
+            cmd.Parameters.AddWithValue("@id_forfait", idForfait);
+
+            try
+            {
+                await cmd.ExecuteNonQueryAsync();
+                Data.SQL.Disconnect();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification du forfait " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+                return false;
+            }
+        }
     }
 }

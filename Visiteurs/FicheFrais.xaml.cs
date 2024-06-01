@@ -37,6 +37,8 @@ namespace AP1_WINUI.Visiteurs
 
         List<Forfait> listForfait;
 
+        double total = 0;
+
         #region METHODES
 
         private async void AjouterFraisForfait()
@@ -77,11 +79,6 @@ namespace AP1_WINUI.Visiteurs
                 DateTime dateSelect = date.Date;
                 await Service.FraisServices.AjoutForfait(ajoutForfait.comboBoxTypeFrais.SelectedIndex + 1, dateSelect, ficheFrais.IdFicheFrais);
             }
-            else
-            {
-                var annuler = new Windows.UI.Popups.MessageDialog("Rien n'a été ajouté !", "Annulation");
-                await annuler.ShowAsync();
-            }
 
             await RefreshFiche();
             ChargerForfait();
@@ -114,7 +111,19 @@ namespace AP1_WINUI.Visiteurs
         private void ChargerForfait()
         {
             datagridForfait.ItemsSource = null;
-            ficheFrais.Forfaits.Sort((x, y) => x.Date.CompareTo(y.Date));
+            ficheFrais.Forfaits.Sort((x, y) => DateTime.Parse(x.Date).CompareTo(DateTime.Parse(y.Date)));
+
+            // Calcul du total des frais forfaits et visibilité du texte
+            {
+                total = 0;
+                foreach (Forfait f in ficheFrais.Forfaits) total += (f.Montant * f.Quantite);
+                total = Math.Round(total, 2);
+                TotalForfait.Text = "Total des Frais Forfaits : " + total + " €";
+
+                if (ficheFrais.Forfaits.Count == 0) TotalForfait.Visibility = Visibility.Collapsed;
+                else TotalForfait.Visibility = Visibility.Visible;
+            }
+
             datagridForfait.ItemsSource = ficheFrais.Forfaits.ToList();
         }
 
@@ -148,6 +157,31 @@ namespace AP1_WINUI.Visiteurs
             base.OnNavigatedTo(e);
 
             ficheFrais = e.Parameter as Data.Modeles.FicheFrais;
+        }
+
+        private async void datagridForfait_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Quantite")
+            {
+                string input = (e.EditingElement as TextBox).Text;
+                int quantite;
+                
+                try { quantite = int.Parse(input); }
+                catch (Exception) { return; }
+
+                if (quantite < 0)
+                {
+                    (e.EditingElement as TextBox).Text = "0";
+                    e.Cancel = true;
+                    var erreur = new Windows.UI.Popups.MessageDialog("La quantité ne peut pas être négative", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+
+                await Service.FraisServices.ModifierForfait((datagridForfait.SelectedItem as Forfait).IdForfait, quantite);
+                await RefreshFiche();
+                ChargerForfait();
+            }
         }
 
         #region FRAIS FORFAITS
@@ -190,6 +224,5 @@ namespace AP1_WINUI.Visiteurs
         }
 
         #endregion
-
     }
 }

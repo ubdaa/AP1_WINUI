@@ -59,7 +59,9 @@ namespace AP1_WINUI
         {
             foreach (var item in user.FicheFrais)
             {
-                if (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day == 11)
+                if (
+                    (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day >= 11)
+                    || (item.Date.AddMonths(1).Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day <= 10))
                 {
                     fiche = item;
                     break;
@@ -68,7 +70,10 @@ namespace AP1_WINUI
 
             // dans le cas où on a rien trouvé
             if (fiche == null)
-                user.FicheFrais.Add(await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11)));
+            {
+                fiche = await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11));
+                user.FicheFrais.Add(fiche);
+            }
 
             nvVisit.SelectedItem = nvVisit.MenuItems[0];
 
