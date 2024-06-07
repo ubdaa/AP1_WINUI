@@ -8,33 +8,35 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
-    <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
-        <StackPanel>
-            <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
-                <TextBlock x:Name="Title" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Fiche frais" VerticalAlignment="Top" FontSize="72" />
-                <TextBlock x:Name="SubTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="48" />
-                <TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" />
+    <ScrollViewer>
+        <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
+            <StackPanel>
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <TextBlock x:Name="Title" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Fiche frais" VerticalAlignment="Top" FontSize="72" />
+                    <TextBlock x:Name="SubTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="48" />
+                    <TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" />
+                </StackPanel>
+                <StackPanel Margin="0,45,0,0">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais forfaits" VerticalAlignment="Top" FontSize="30" />
+                    <CommandBar VerticalAlignment="Top" HorizontalAlignment="Left">
+                        <CommandBar.PrimaryCommands>
+                            <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterForfait_Click"/>
+                            <AppBarSeparator />
+                            <AppBarButton Icon="Edit" Label="Editer"/>
+                            <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerForfait_Click"/>
+                            <AppBarSeparator />
+                        </CommandBar.PrimaryCommands>
+                    </CommandBar>
+                    <controls:DataGrid x:Name="datagridForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0" AutoGeneratingColumn="datagridForfait_AutoGeneratingColumn" 
+                                       CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CellEditEnding="datagridForfait_CellEditEnding" />
+                    <TextBlock x:Name="TotalForfait" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Montant total des frais forfait : " VerticalAlignment="Top" FontSize="20" Margin="0,10,0,0" />
+                </StackPanel>
+                <StackPanel Margin="0,45,0,0">
+                    <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
+                    <controls:DataGrid x:Name="datagridHorsForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0"
+                                       CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" />
+                </StackPanel>
             </StackPanel>
-            <StackPanel Margin="0,45,0,0">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais forfaits" VerticalAlignment="Top" FontSize="30" />
-                <CommandBar VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <CommandBar.PrimaryCommands>
-                        <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterForfait_Click"/>
-                        <AppBarSeparator />
-                        <AppBarButton Icon="Edit" Label="Editer"/>
-                        <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerForfait_Click"/>
-                        <AppBarSeparator />
-                    </CommandBar.PrimaryCommands>
-                </CommandBar>
-                <controls:DataGrid x:Name="datagridForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0" AutoGeneratingColumn="datagridForfait_AutoGeneratingColumn" 
-                                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CellEditEnding="datagridForfait_CellEditEnding" />
-                <TextBlock x:Name="TotalForfait" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Montant total des frais forfait : " VerticalAlignment="Top" FontSize="20" Margin="0,10,0,0" />
-            </StackPanel>
-            <StackPanel Margin="0,45,0,0">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
-                <controls:DataGrid x:Name="datagridHorsForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0"
-                                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" />
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Page>

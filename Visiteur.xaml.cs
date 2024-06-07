@@ -60,8 +60,8 @@ namespace AP1_WINUI
             foreach (var item in user.FicheFrais)
             {
                 if (
-                    (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day >= 11)
-                    || (item.Date.AddMonths(1).Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && item.Date.Day <= 10))
+                    (item.Date.Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && DateTime.Now.Day >= 11)
+                    || (item.Date.AddMonths(1).Month == DateTime.Now.Month && item.Date.Year == DateTime.Now.Year && DateTime.Now.Day <= 10))
                 {
                     fiche = item;
                     break;

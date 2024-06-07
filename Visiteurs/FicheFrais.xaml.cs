@@ -177,6 +177,7 @@ namespace AP1_WINUI.Visiteurs
 
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
+            e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
             switch (e.PropertyName)
             {
                 case "IdForfait":
