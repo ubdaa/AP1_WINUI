@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using AP1_WINUI.Data;
 using AP1_WINUI.Data.Modeles;
 
 namespace AP1_WINUI.Service
@@ -70,7 +71,6 @@ namespace AP1_WINUI.Service
         public static async Task<List<TypeFrais>> RecupTypeFrais()
         {
             List<TypeFrais> typeFrais = new List<TypeFrais>();
-
             try
             {
                 string Query = "SELECT * FROM type_frais";
@@ -204,30 +204,18 @@ namespace AP1_WINUI.Service
 
         public static async Task<bool> AjoutHorsForfait(string nom, DateTime date, double montant, int idFiche)
         {
-            await Data.SQL.Connect();
-
-            string Query = "INSERT INTO hors_forfait (nom, etat, date, montant, fiche_frais) VALUES (@nom, @etat, @date, @montant, @fiche_frais)";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@nom", nom);
-            cmd.Parameters.AddWithValue("@etat", EtatNote.ATTENTE);
-            cmd.Parameters.AddWithValue("@date", date);
-            cmd.Parameters.AddWithValue("@montant", montant);
-            cmd.Parameters.AddWithValue("@fiche_frais", idFiche);
-
             try
             {
-
-                Data.SQL.Disconnect();
-                
+                string Query = "INSERT INTO hors_forfait (nom, etat, date, montant, fiche_frais) VALUES (@nom, @etat, @date, @montant, @fiche_frais)";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@nom", nom }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@montant", montant }, { "@fiche_fra              Data.SQL.Disconnect();
+                Data.SQL.Disconnect()
                 return true;
             }
             catch (Exception e)
             {
                 Data.SQL.Disconnect();
-
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du hors forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
-
                 return false;
             }
         }

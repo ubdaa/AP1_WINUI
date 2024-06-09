@@ -40,16 +40,11 @@ namespace AP1_WINUI.Service
 
         public static async Task<Utilisateur> UtilisateurBase(int idUtilisateur)
         {
-            await Data.SQL.Connect();
             Utilisateur user = null;
-
-            string query = "SELECT * FROM utilisateur WHERE id_utilisateur = @id";
-            var cmd = new MySqlConnector.MySqlCommand(query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id", idUtilisateur);
-
             try
             {
-                var reader = await cmd.ExecuteReaderAsync();
+                string query = "SELECT * FROM utilisateur WHERE id_utilisateur = @id";
+                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
                 if (reader.Read())
                 {
                     var utilisateur = new Utilisateur
@@ -76,14 +71,10 @@ namespace AP1_WINUI.Service
 
         private static async Task<Utilisateur> RecupFicheFrais(Utilisateur user)
         {
-            await Data.SQL.Connect();
-            string query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur";
-            var cmd = new MySqlConnector.MySqlCommand(query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id_utilisateur", user.IdUtilisateur);
-
             try
             {
-                var reader = await cmd.ExecuteReaderAsync();
+                string query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur";
+                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id_utilisateur", user.IdUtilisateur } });
                 user.FicheFrais = new List<FicheFrais>();
                 while (reader.Read())
                 {
@@ -98,6 +89,8 @@ namespace AP1_WINUI.Service
 
                     user.FicheFrais.Add(fiche);
                 }
+                Data.SQL.Disconnect();
+                return user;
             }
             catch
             {
@@ -106,9 +99,6 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
                 return null;
             }
-
-            Data.SQL.Disconnect();
-            return user;
         }
 
         public static async Task<Utilisateur> Login(string username, string password)
