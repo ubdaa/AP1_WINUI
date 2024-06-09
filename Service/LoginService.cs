@@ -9,17 +9,12 @@ namespace AP1_WINUI.Service
     {
         private static async Task<Utilisateur> UtilisateurBase(string username, string password)
         {
-            await Data.SQL.Connect();
             Utilisateur user = null;
-
-            string query = "SELECT * FROM utilisateur WHERE username = @username AND mdp = @password";
-            var cmd = new MySqlConnector.MySqlCommand(query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@username", username);
-            cmd.Parameters.AddWithValue("@password", password);
 
             try
             {
-                var reader = await cmd.ExecuteReaderAsync();
+                string query = "SELECT * FROM utilisateur WHERE username = @username AND mdp = @password";
+                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@username", username }, { "@password", password } });
                 if (reader.Read())
                 {
                     var utilisateur = new Utilisateur

@@ -53,8 +53,6 @@ namespace AP1_WINUI.Data
             }
 
             MySqlDataReader reader = await cmd.ExecuteReaderAsync();
-            Disconnect();
-
             return reader;
         }
 
@@ -71,8 +69,6 @@ namespace AP1_WINUI.Data
                     cmd.Parameters.AddWithValue(param.Key, param.Value);
                 }
             }
-
-            Disconnect();
             return await cmd.ExecuteNonQueryAsync();
         }
 

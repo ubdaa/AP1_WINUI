@@ -15,16 +15,10 @@ namespace AP1_WINUI.Service
         {
             FicheFrais ficheFrais = new FicheFrais();
 
-            await Data.SQL.Connect();
-
-            string Query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur AND date_fiche = @date";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id_utilisateur", idUtilisateur);
-            cmd.Parameters.AddWithValue("@date", date);
-
             try
             {
-                var reader = await cmd.ExecuteReaderAsync();
+                string Query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur AND date_fiche = @date";
+                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_utilisateur", idUtilisateur }, { "@date", date } });
                 if (reader.Read())
                 {
                     ficheFrais.IdFicheFrais = reader.GetInt32("id_fiche");
@@ -52,16 +46,10 @@ namespace AP1_WINUI.Service
         {
             FicheFrais fiches = new FicheFrais();
 
-            await Data.SQL.Connect();
-            string Query = "INSERT INTO fiche_de_frais (date_fiche, utilisateur, etat) VALUES (@date, @utilisateur, @etat)";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@date", date);
-            cmd.Parameters.AddWithValue("@utilisateur", userName);
-            cmd.Parameters.AddWithValue("@etat", EtatFiche.ATTENTE);
-
             try
             {
-                await cmd.ExecuteNonQueryAsync();
+                string Query = "INSERT INTO fiche_de_frais (date_fiche, utilisateur, etat) VALUES (@date, @utilisateur, @etat)";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@date", date }, { "@utilisateur", userName }, { "@etat", EtatFiche.ATTENTE } } );
                 Data.SQL.Disconnect();
             }
             catch (Exception e)
@@ -83,13 +71,10 @@ namespace AP1_WINUI.Service
         {
             List<TypeFrais> typeFrais = new List<TypeFrais>();
 
-            await Data.SQL.Connect();
-            string Query = "SELECT * FROM type_frais";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-
             try
             {
-                var reader = cmd.ExecuteReader();
+                string Query = "SELECT * FROM type_frais";
+                var reader = await Data.SQL.ExecuteQuery(Query);
                 while (reader.Read())
                 {
                     typeFrais.Add(new TypeFrais
@@ -119,18 +104,10 @@ namespace AP1_WINUI.Service
 
         public static async Task<bool> AjoutForfait(int idTypeFrais, DateTime date, int idFiche)
         {
-            await Data.SQL.Connect();
-            string Query = "INSERT INTO forfait (type_forfait, etat, date, fiche_frais, quantite) VALUES (@id_type_forfait, @etat, @date, @fiche_frais, @quantite)";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id_type_forfait", idTypeFrais);
-            cmd.Parameters.AddWithValue("@etat", EtatNote.ATTENTE);
-            cmd.Parameters.AddWithValue("@date", date);
-            cmd.Parameters.AddWithValue("@fiche_frais", idFiche);
-            cmd.Parameters.AddWithValue("@quantite", 0);
-
             try
             {
-                await cmd.ExecuteNonQueryAsync();
+                string Query = "INSERT INTO forfait (type_forfait, etat, date, fiche_frais, quantite) VALUES (@id_type_forfait, @etat, @date, @fiche_frais, @quantite)";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_type_forfait", idTypeFrais }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@fiche_frais", idFiche }, { "@quantite", 0 } });
                 Data.SQL.Disconnect();
                 return true;
             }
@@ -150,14 +127,11 @@ namespace AP1_WINUI.Service
             List<Forfait> forfaits = new List<Forfait>();
             List<TypeFrais> typeFrais = await RecupTypeFrais();
 
-            await Data.SQL.Connect();
             string Query = "SELECT * FROM forfait WHERE fiche_frais = @id_fiche";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id_fiche", idFiche);
 
             try
             {
-                var reader = cmd.ExecuteReader();
+                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
                 while (reader.Read())
                 {
                     forfaits.Add(new Forfait
@@ -188,14 +162,10 @@ namespace AP1_WINUI.Service
 
         public static async Task<bool> SupprimerForfait(int idForfait)
         {
-            await Data.SQL.Connect();
-            string Query = "DELETE FROM forfait WHERE id_forfait = @id_forfait";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@id_forfait", idForfait);
-
             try
             {
-                await cmd.ExecuteNonQueryAsync();
+                string Query = "DELETE FROM forfait WHERE id_forfait = @id_forfait";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_forfait", idForfait } });
                 Data.SQL.Disconnect();
                 return true;
             }
@@ -211,15 +181,10 @@ namespace AP1_WINUI.Service
 
         public static async Task<bool> ModifierForfait(int idForfait, int quantite)
         {
-            await Data.SQL.Connect();
-            string Query = "UPDATE forfait SET quantite = @quantite WHERE id_forfait = @id_forfait";
-            var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
-            cmd.Parameters.AddWithValue("@quantite", quantite);
-            cmd.Parameters.AddWithValue("@id_forfait", idForfait);
-
             try
             {
-                await cmd.ExecuteNonQueryAsync();
+                string Query = "UPDATE forfait SET quantite = @quantite WHERE id_forfait = @id_forfait";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@quantite", quantite }, { "@id_forfait", idForfait } });
                 Data.SQL.Disconnect();
                 return true;
             }
@@ -251,7 +216,7 @@ namespace AP1_WINUI.Service
 
             try
             {
-                await cmd.ExecuteNonQueryAsync();
+
                 Data.SQL.Disconnect();
                 
                 return true;
