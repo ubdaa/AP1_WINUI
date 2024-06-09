@@ -240,6 +240,7 @@ namespace AP1_WINUI.Service
         public static async Task<bool> AjoutHorsForfait(string nom, DateTime date, double montant, int idFiche)
         {
             await Data.SQL.Connect();
+
             string Query = "INSERT INTO hors_forfait (nom, etat, date, montant, fiche_frais) VALUES (@nom, @etat, @date, @montant, @fiche_frais)";
             var cmd = new MySqlConnector.MySqlCommand(Query, Data.SQL.Connection);
             cmd.Parameters.AddWithValue("@nom", nom);

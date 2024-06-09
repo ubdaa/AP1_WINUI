@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using MySqlConnector;
 using Windows.UI.Xaml;
+using System.Collections;
 
 
 namespace AP1_WINUI.Data
@@ -37,5 +38,43 @@ namespace AP1_WINUI.Data
         {
             Connection.Close();
         }
+
+        public static async Task<MySqlDataReader> ExecuteQuery(string query, Dictionary<string, object> parameters = null)
+        {
+            await Connect();
+            MySqlCommand cmd = new MySqlCommand(query, Connection);
+
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+            }
+
+            MySqlDataReader reader = await cmd.ExecuteReaderAsync();
+            Disconnect();
+
+            return reader;
+        }
+
+        public static async Task<int> ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
+        {
+            await Connect();
+
+            MySqlCommand cmd = new MySqlCommand(query, Connection);
+
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+            }
+
+            Disconnect();
+            return await cmd.ExecuteNonQueryAsync();
+        }
+
     }
 }
