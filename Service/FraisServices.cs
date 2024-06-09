@@ -207,8 +207,8 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "INSERT INTO hors_forfait (nom, etat, date, montant, fiche_frais) VALUES (@nom, @etat, @date, @montant, @fiche_frais)";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@nom", nom }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@montant", montant }, { "@fiche_fra              Data.SQL.Disconnect();
-                Data.SQL.Disconnect()
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@nom", nom }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@montant", montant }, { "@fiche_frais", idFiche } });
+                Data.SQL.Disconnect();
                 return true;
             }
             catch (Exception e)
