@@ -49,7 +49,7 @@ namespace AP1_WINUI.Visiteurs
 
             Popups.AjoutForfait ajoutForfait = new Popups.AjoutForfait();
             {
-                dialog.Title = "Ajout d'un forfait";
+                dialog.Title = "Ajout d'un frais forfait";
                 dialog.PrimaryButtonText = "Ajouter";
                 dialog.SecondaryButtonText = "Annuler";
                 ajoutForfait.comboBoxTypeFrais.ItemsSource = SourceComboBox;
@@ -126,9 +126,74 @@ namespace AP1_WINUI.Visiteurs
 
         #endregion
 
+        #region FRAIS HORS FORFAITS
+
+        private async void AjouterFraisHorsForfait()
+        {
+            ContentDialog dialog = new ContentDialog();
+
+            Popups.AjoutHorsForfait ajoutHorsForfait = new Popups.AjoutHorsForfait();
+            {
+                dialog.Title = "Ajout d'un frais hors forfait";
+                dialog.PrimaryButtonText = "Ajouter";
+                dialog.SecondaryButtonText = "Annuler";
+                ajoutHorsForfait.datePicker.MinDate = new DateTime(ficheFrais.Date.Year, ficheFrais.Date.Month, 11);
+                ajoutHorsForfait.datePicker.MaxDate = new DateTime(ficheFrais.Date.Year, ficheFrais.Date.AddMonths(1).Month, 10);
+                dialog.Content = ajoutHorsForfait;
+                dialog.DefaultButton = ContentDialogButton.Primary;
+            }
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                if (ajoutHorsForfait.datePicker.Date == null)
+                {
+                    var erreur = new Windows.UI.Popups.MessageDialog("Veuillez renseigner une date", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+                if (string.IsNullOrEmpty(ajoutHorsForfait.nomHorsForfait.Text))
+                {
+                    var erreur = new Windows.UI.Popups.MessageDialog("Veuillez renseigner un type de frais", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+
+                DateTimeOffset date = (DateTimeOffset)ajoutHorsForfait.datePicker.Date;
+                DateTime dateSelect = date.Date;
+                await Service.FraisServices.AjoutHorsForfait(ajoutHorsForfait.nomHorsForfait.Text, dateSelect, 0, ficheFrais.IdFicheFrais);
+            }
+
+            await RefreshFiche();
+            ChargerHorsForfait();
+        }
+
+        private void ChargerHorsForfait()
+        {
+            datagridHorsForfait.ItemsSource = null;
+            ficheFrais.HorsForfaits.Sort((x, y) => DateTime.Parse(x.Date).CompareTo(DateTime.Parse(y.Date)));
+
+            // Calcul du total des frais forfaits et visibilité du texte
+            /*{
+                total = 0;
+                foreach (Forfait f in ficheFrais.Forfaits) total += (f.Montant * f.Quantite);
+                total = Math.Round(total, 2);
+                TotalForfait.Text = "Total des Frais Forfaits : " + total + " €";
+
+                if (ficheFrais.Forfaits.Count == 0) TotalForfait.Visibility = Visibility.Collapsed;
+                else TotalForfait.Visibility = Visibility.Visible;
+            }*/
+
+            datagridHorsForfait.ItemsSource = ficheFrais.HorsForfaits.ToList();
+        }
+
+        #endregion
+
         private async Task RefreshFiche()
         {
             ficheFrais.Forfaits = await Service.FraisServices.RecupForfait(ficheFrais.IdFicheFrais);
+            ficheFrais.HorsForfaits = await Service.FraisServices.RecupHorsForfait(ficheFrais.IdFicheFrais);
         }
 
         #endregion
@@ -154,6 +219,7 @@ namespace AP1_WINUI.Visiteurs
 
             await RefreshFiche();
             ChargerForfait();
+            ChargerHorsForfait();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -229,5 +295,69 @@ namespace AP1_WINUI.Visiteurs
         }
 
         #endregion
+
+        #region FORFAITS HORS FORFAITS
+
+        private void AjouterHorsForfait_Click(object sender, RoutedEventArgs e)
+        {
+            AjouterFraisHorsForfait();
+        }
+
+        private void SupprimerHorsForfait_Click(object sender, RoutedEventArgs e)
+        {
+            SupprimerFraisForfait();
+        }
+
+        private void datagridHorsForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
+            switch (e.PropertyName)
+            {
+                case "IdHorsForfait":
+                    e.Column.Visibility = Visibility.Collapsed;
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Date":
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Nom":
+                    e.Column.IsReadOnly = true;
+                    break;
+                case "Montant":
+                    e.Column.IsReadOnly = false;
+                    break;
+                case "Etat":
+                    e.Column.IsReadOnly = true;
+                    break;
+            }
+        }
+
+        private async void datagridHorsForfait_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Montant")
+            {
+                string input = (e.EditingElement as TextBox).Text;
+                int quantite;
+
+                try { quantite = int.Parse(input); }
+                catch (Exception) { return; }
+
+                if (quantite < 0)
+                {
+                    (e.EditingElement as TextBox).Text = "0";
+                    e.Cancel = true;
+                    var erreur = new Windows.UI.Popups.MessageDialog("Le montant ne peut pas être négatif", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+
+                //await Service.FraisServices.ModifierForfait((datagridForfait.SelectedItem as Forfait).IdForfait, quantite);
+                await RefreshFiche();
+                ChargerHorsForfait();
+            }
+        }
+
+        #endregion
+
     }
 }

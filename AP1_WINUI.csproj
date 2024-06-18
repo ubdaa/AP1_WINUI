@@ -120,7 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\Modeles\FicheFrais.cs" />
-    <Compile Include="Data\Modeles\Forfait.cs" />
+    <Compile Include="Data\Modeles\Frais.cs" />
     <Compile Include="Data\Modeles\Utilisateur.cs" />
     <Compile Include="Data\Requete.cs" />
     <Compile Include="Data\SQL.cs" />
@@ -132,6 +132,9 @@
     </Compile>
     <Compile Include="Popups\AjoutForfait.xaml.cs">
       <DependentUpon>AjoutForfait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\AjoutHorsForfait.xaml.cs">
+      <DependentUpon>AjoutHorsForfait.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\FraisServices.cs" />
@@ -179,6 +182,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Popups\AjoutForfait.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Popups\AjoutHorsForfait.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

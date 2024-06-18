@@ -31,11 +31,12 @@
                                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CellEditEnding="datagridForfait_CellEditEnding" />
                     <TextBlock x:Name="TotalForfait" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Montant total des frais forfait : " VerticalAlignment="Top" FontSize="20" Margin="0,10,0,0" />
                 </StackPanel>
+                
                 <StackPanel Margin="0,45,0,0">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
                     <CommandBar VerticalAlignment="Top" HorizontalAlignment="Left">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton Icon="Add" Label="Ajouter Note" />
+                            <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterHorsForfait_Click" />
                             <AppBarSeparator />
                             <AppBarButton Icon="Edit" Label="Editer"/>
                             <AppBarButton Icon="Delete" Label="Supprimer" />
@@ -43,7 +44,8 @@
                         </CommandBar.PrimaryCommands>
                     </CommandBar>
                     <controls:DataGrid x:Name="datagridHorsForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0"
-                                       CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" />
+                                       CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGeneratingColumn="datagridHorsForfait_AutoGeneratingColumn" 
+                                       CellEditEnding="datagridHorsForfait_CellEditEnding"/>
                 </StackPanel>
             </StackPanel>
         </Grid>

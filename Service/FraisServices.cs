@@ -220,6 +220,41 @@ namespace AP1_WINUI.Service
             }
         }
 
+        public static async Task<List<HorsForfait>> RecupHorsForfait(int idFiche)
+        {
+            List<HorsForfait> horsForfaits = new List<HorsForfait>();
+
+            string Query = "SELECT * FROM hors_forfait WHERE fiche_frais = @id_fiche";
+
+            try
+            {
+                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
+                while (reader.Read())
+                {
+                    horsForfaits.Add(new HorsForfait
+                    {
+                        IdHorsForfait = reader.GetInt32("id_hors_forfait"),
+                        Nom = reader.GetString("nom"),
+                        Date = reader.GetDateTime("date").ToString(),
+                        Etat = reader.GetString("etat"),
+                        Montant = reader.GetDouble("montant")
+                    });
+                }
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des hors forfaits " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return horsForfaits;
+        }
+
         #endregion
     }
 }

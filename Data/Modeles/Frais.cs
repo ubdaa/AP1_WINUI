@@ -40,7 +40,7 @@ namespace AP1_WINUI.Data.Modeles
     {
         public int IdHorsForfait { get; set; }
         public string Nom { get; set; }
-        public DateTime _date { get; set; }
+        private DateTime _date { get; set; }
         public string Date
         {
             get { return _date.ToShortDateString(); }
