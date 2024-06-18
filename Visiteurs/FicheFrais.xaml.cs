@@ -356,12 +356,12 @@ namespace AP1_WINUI.Visiteurs
             if (e.Column.Header.ToString() == "Montant")
             {
                 string input = (e.EditingElement as TextBox).Text;
-                int quantite;
+                int montant;
 
-                try { quantite = int.Parse(input); }
+                try { montant = int.Parse(input); }
                 catch (Exception) { return; }
 
-                if (quantite < 0)
+                if (montant < 0)
                 {
                     (e.EditingElement as TextBox).Text = "0";
                     e.Cancel = true;
@@ -370,7 +370,7 @@ namespace AP1_WINUI.Visiteurs
                     return;
                 }
 
-                //await Service.FraisServices.ModifierForfait((datagridForfait.SelectedItem as Forfait).IdForfait, quantite);
+                await Service.FraisServices.ModifierHorsForfait((datagridHorsForfait.SelectedItem as HorsForfait).IdHorsForfait, montant);
                 await RefreshFiche();
                 ChargerHorsForfait();
             }

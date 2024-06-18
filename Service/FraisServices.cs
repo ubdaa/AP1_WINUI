@@ -274,6 +274,25 @@ namespace AP1_WINUI.Service
             }
         }
 
+        public static async Task<bool> ModifierHorsForfait(int idHorsForfait, int montant)
+        {
+            try
+            {
+                string Query = "UPDATE hors_forfait SET montant = @montant WHERE id_hors_forfait = @id_hors_forfait";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@montant", montant }, { "@id_hors_forfait", idHorsForfait } });
+                Data.SQL.Disconnect();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification du hors forfait " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+                return false;
+            }
+        }
+
         #endregion
     }
 }
