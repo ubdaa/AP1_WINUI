@@ -39,7 +39,7 @@
                             <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterHorsForfait_Click" />
                             <AppBarSeparator />
                             <AppBarButton Icon="Edit" Label="Editer"/>
-                            <AppBarButton Icon="Delete" Label="Supprimer" />
+                            <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerHorsForfait_Click"/>
                             <AppBarSeparator />
                         </CommandBar.PrimaryCommands>
                     </CommandBar>

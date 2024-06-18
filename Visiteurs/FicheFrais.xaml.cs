@@ -169,6 +169,25 @@ namespace AP1_WINUI.Visiteurs
             ChargerHorsForfait();
         }
 
+        private async void SupprimerFraisHorsForfait()
+        {
+            var horsForfait = (HorsForfait)datagridHorsForfait.SelectedItem;
+
+            if (horsForfait != null)
+            {
+                await Service.FraisServices.SupprimerHorsForfait(horsForfait.IdHorsForfait);
+                await RefreshFiche();
+                ChargerHorsForfait();
+            }
+            else
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Aucun hors forfait n'a été sélectionné", "Erreur");
+                await dialog.ShowAsync();
+            }
+
+            datagridHorsForfait.SelectedIndex = -1;
+        }
+
         private void ChargerHorsForfait()
         {
             datagridHorsForfait.ItemsSource = null;
@@ -305,7 +324,7 @@ namespace AP1_WINUI.Visiteurs
 
         private void SupprimerHorsForfait_Click(object sender, RoutedEventArgs e)
         {
-            SupprimerFraisForfait();
+            SupprimerFraisHorsForfait();
         }
 
         private void datagridHorsForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)

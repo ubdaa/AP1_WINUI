@@ -255,6 +255,25 @@ namespace AP1_WINUI.Service
             return horsForfaits;
         }
 
+        public static async Task<bool> SupprimerHorsForfait(int idHorsForfait)
+        {
+            try
+            {
+                string Query = "DELETE FROM hors_forfait WHERE id_hors_forfait = @id_hors_forfait";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_hors_forfait", idHorsForfait } });
+                Data.SQL.Disconnect();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression du hors forfait " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+                return false;
+            }
+        }
+
         #endregion
     }
 }
