@@ -9,9 +9,10 @@ namespace AP1_WINUI.Data.Modeles
     public enum EtatFiche
     {
         ATTENTE = 1,
-        ACCEPTE = 2,
-        REFUSE = 3,
-        REFUSPARTIEL = 4
+        COURS = 2,
+        ACCEPTE = 3,
+        REFUSE = 4,
+        REFUS_PARTIEL = 5
     }
 
     public class FicheFrais
