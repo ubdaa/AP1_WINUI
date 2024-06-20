@@ -59,7 +59,7 @@ namespace AP1_WINUI.Administrateurs
             } 
         }
 
-        private async void AJoutUtilisateur_Click(object sender, RoutedEventArgs e)
+        private async void AjoutUtilisateur_Click(object sender, RoutedEventArgs e)
         {
             ContentDialog dialog = new ContentDialog();
 
@@ -100,6 +100,98 @@ namespace AP1_WINUI.Administrateurs
                 };
 
                 await Service.GestionUtilisateursService.AjouterUtilisateur(utilisateur);
+                users = await Service.GestionUtilisateursService.RecupererTousUtilisateurs();
+                datagridUtilisateurs.ItemsSource = users.ToList();
+            }
+        }
+
+        private async void SuppressionUtilisateur_Click(object sender, RoutedEventArgs e)
+        {
+            if (datagridUtilisateurs.SelectedItem == null)
+            {
+                ContentDialog dialogErreur = new ContentDialog
+                {
+                    Title = "Erreur",
+                    Content = "Veuillez sélectionner un utilisateur",
+                    CloseButtonText = "Ok"
+                };
+
+                await dialogErreur.ShowAsync();
+                return;
+            }
+
+            Data.Modeles.Utilisateur utilisateur = (Data.Modeles.Utilisateur)datagridUtilisateurs.SelectedItem;
+
+            ContentDialog dialog = new ContentDialog
+            {
+                Title = "Supprimer l'utilisateur",
+                Content = "Voulez-vous vraiment supprimer l'utilisateur " + utilisateur.Username + " ?",
+                PrimaryButtonText = "Oui",
+                SecondaryButtonText = "Non"
+            };
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                await Service.GestionUtilisateursService.SupprimerUtilisateur(utilisateur);
+                users = await Service.GestionUtilisateursService.RecupererTousUtilisateurs();
+                datagridUtilisateurs.ItemsSource = users.ToList();
+            }
+        }
+
+        private async void ModifierUtilisateur_Click(object sender, RoutedEventArgs e)
+        {
+            if (datagridUtilisateurs.SelectedItem == null)
+            {
+                ContentDialog dialogErreur = new ContentDialog
+                {
+                    Title = "Erreur",
+                    Content = "Veuillez sélectionner un utilisateur",
+                    CloseButtonText = "Ok"
+                };
+
+                await dialogErreur.ShowAsync();
+                return;
+            }
+
+            Data.Modeles.Utilisateur utilisateur = (Data.Modeles.Utilisateur)datagridUtilisateurs.SelectedItem;
+
+            ContentDialog dialog = new ContentDialog();
+
+            Popups.AjoutUtilisateur modifierUtilisateur = new Popups.AjoutUtilisateur();
+            {
+                dialog.Title = "Modifier un utilisateur";
+                dialog.PrimaryButtonText = "Modifier";
+                dialog.SecondaryButtonText = "Annuler";
+                modifierUtilisateur.comboBoxRole.ItemsSource = Enum.GetValues(typeof(Data.Modeles.Role));
+                modifierUtilisateur.Username.Visibility = Visibility.Collapsed;
+                modifierUtilisateur.Password.Visibility = Visibility.Collapsed;
+                modifierUtilisateur.comboBoxRole.SelectedIndex = (int)utilisateur.Role - 1;
+                dialog.Content = modifierUtilisateur;
+                dialog.DefaultButton = ContentDialogButton.Primary;
+            }
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                if (modifierUtilisateur.comboBoxRole.SelectedItem == null)
+                {
+                    ContentDialog dialogErreur = new ContentDialog
+                    {
+                        Title = "Erreur",
+                        Content = "Veuillez choisir quelque chose tous les champs",
+                        CloseButtonText = "Ok"
+                    };
+
+                    await dialogErreur.ShowAsync();
+                    return;
+                }
+
+                utilisateur.Role = (Data.Modeles.Role)modifierUtilisateur.comboBoxRole.SelectedItem;
+
+                await Service.GestionUtilisateursService.ModifierUtilisateur(utilisateur);
                 users = await Service.GestionUtilisateursService.RecupererTousUtilisateurs();
                 datagridUtilisateurs.ItemsSource = users.ToList();
             }

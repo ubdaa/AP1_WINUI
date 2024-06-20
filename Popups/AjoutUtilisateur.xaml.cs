@@ -40,9 +40,28 @@ namespace AP1_WINUI.Popups
             set { roleComboBox = value; }
         }
 
+        public StackPanel Username
+        {
+            get { return _username; }
+            set { _username = value; }
+        }
+
+        public StackPanel Password
+        {
+            get { return _mdp; }
+            set { _mdp = value; }
+        }
+
+        public StackPanel Role
+        {
+            get { return _role; }
+            set { _role = value; }
+        }
+
         public AjoutUtilisateur()
         {
             this.InitializeComponent();
+            
         }
     }
 }

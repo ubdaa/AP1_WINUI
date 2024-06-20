@@ -62,5 +62,41 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
             }
         }
+
+        public static async Task SupprimerUtilisateur(Utilisateur utilisateur)
+        {
+            string Query = "DELETE FROM Utilisateur WHERE id_utilisateur = @id_utilisateur";
+
+            try
+            {
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_utilisateur", utilisateur.IdUtilisateur } });
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression de l'utilisateur " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+            }
+        }
+
+        public static async Task ModifierUtilisateur(Utilisateur utilisateur)
+        {
+            string Query = "UPDATE Utilisateur SET username = @username, mdp = @mdp, id_role = @id_role WHERE id_utilisateur = @id_utilisateur";
+
+            try
+            {
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role }, { "@id_utilisateur", utilisateur.IdUtilisateur } });
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification de l'utilisateur " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+            }
+        }
     }
 }

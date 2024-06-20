@@ -17,10 +17,10 @@
                 <StackPanel Margin="0,45,0,0">
                     <CommandBar VerticalAlignment="Top" HorizontalAlignment="Left">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton Icon="Add" Label="Ajouter Utilisateur" Click="AJoutUtilisateur_Click"/>
+                            <AppBarButton Icon="Add" Label="Ajouter Utilisateur" Click="AjoutUtilisateur_Click"/>
                             <AppBarSeparator />
-                            <AppBarButton Icon="Edit" Label="Editer le rôle"/>
-                            <AppBarButton Icon="Delete" Label="Supprimer Utilisateur"/>
+                            <AppBarButton Icon="Edit" Label="Editer le rôle" Click="ModifierUtilisateur_Click"/>
+                            <AppBarButton Icon="Delete" Label="Supprimer Utilisateur" Click="SuppressionUtilisateur_Click"/>
                             <AppBarSeparator />
                         </CommandBar.PrimaryCommands>
                     </CommandBar>
