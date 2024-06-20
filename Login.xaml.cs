@@ -43,6 +43,9 @@ namespace AP1_WINUI
                 case Role.VISITEUR:
                     Frame.Navigate(typeof(Visiteur), user);
                     break;
+                case Role.ADMIN:
+                    Frame.Navigate(typeof(Administrateur), user);
+                    break;
             }
         }
     }
