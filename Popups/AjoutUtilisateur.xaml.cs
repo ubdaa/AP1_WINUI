@@ -22,6 +22,24 @@ namespace AP1_WINUI.Popups
     /// </summary>
     public sealed partial class AjoutUtilisateur : Page
     {
+        public TextBox textBoxUsername
+        {
+            get { return usernameTextBox; }
+            set { usernameTextBox = value; }
+        }
+
+        public TextBox textBoxPassword
+        {
+            get { return passwordTextBox; }
+            set { passwordTextBox = value; }
+        }
+
+        public ComboBox comboBoxRole
+        {
+            get { return roleComboBox; }
+            set { roleComboBox = value; }
+        }
+
         public AjoutUtilisateur()
         {
             this.InitializeComponent();

@@ -59,9 +59,50 @@ namespace AP1_WINUI.Administrateurs
             } 
         }
 
-        private void AJoutUtilisateur_Click(object sender, RoutedEventArgs e)
+        private async void AJoutUtilisateur_Click(object sender, RoutedEventArgs e)
         {
+            ContentDialog dialog = new ContentDialog();
 
+            Popups.AjoutUtilisateur ajoutUtilisateur = new Popups.AjoutUtilisateur();
+            {
+                dialog.Title = "Ajouter un utilisateur";
+                dialog.PrimaryButtonText = "Ajouter";
+                dialog.SecondaryButtonText = "Annuler";
+                ajoutUtilisateur.comboBoxRole.ItemsSource = Enum.GetValues(typeof(Data.Modeles.Role));
+                dialog.Content = ajoutUtilisateur;
+                dialog.DefaultButton = ContentDialogButton.Primary;
+            }
+
+            var result = await dialog.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                if (string.IsNullOrEmpty(ajoutUtilisateur.textBoxPassword.Text) ||
+                    string.IsNullOrEmpty(ajoutUtilisateur.textBoxUsername.Text) ||
+                    ajoutUtilisateur.comboBoxRole.SelectedItem == null)
+                {
+                    ContentDialog dialogErreur = new ContentDialog
+                    {
+                        Title = "Erreur",
+                        Content = "Veuillez remplir tous les champs",
+                        CloseButtonText = "Ok"
+                    };
+
+                    await dialogErreur.ShowAsync();
+                    return;
+                }
+
+                Data.Modeles.Utilisateur utilisateur = new Data.Modeles.Utilisateur
+                {
+                    Username = ajoutUtilisateur.textBoxUsername.Text,
+                    Password = ajoutUtilisateur.textBoxPassword.Text,
+                    Role = (Data.Modeles.Role)ajoutUtilisateur.comboBoxRole.SelectedItem
+                };
+
+                await Service.GestionUtilisateursService.AjouterUtilisateur(utilisateur);
+                users = await Service.GestionUtilisateursService.RecupererTousUtilisateurs();
+                datagridUtilisateurs.ItemsSource = users.ToList();
+            }
         }
     }
 }

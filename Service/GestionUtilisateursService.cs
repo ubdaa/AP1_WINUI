@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AP1_WINUI.Data.Modeles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,5 +45,22 @@ namespace AP1_WINUI.Service
             }
         }
 
+        public static async Task AjouterUtilisateur(Utilisateur utilisateur)
+        {
+            string Query = "INSERT INTO Utilisateur (username, mdp, id_role) VALUES (@username,  @mdp, @id_role)";
+
+            try
+            { 
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role } });
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout de l'utilisateur " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+            }
+        }
     }
 }
