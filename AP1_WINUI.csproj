@@ -119,6 +119,9 @@
     <Compile Include="Administrateur.xaml.cs">
       <DependentUpon>Administrateur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Administrateurs\GestionUtilisateurs.xaml.cs">
+      <DependentUpon>GestionUtilisateurs.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\FraisServices.cs" />
+    <Compile Include="Service\GestionUtilisateursService.cs" />
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Visiteur.xaml.cs">
       <DependentUpon>Visiteur.xaml</DependentUpon>
@@ -177,6 +181,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Administrateur.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Administrateurs\GestionUtilisateurs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
