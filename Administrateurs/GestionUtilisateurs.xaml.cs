@@ -196,5 +196,48 @@ namespace AP1_WINUI.Administrateurs
                 datagridUtilisateurs.ItemsSource = users.ToList();
             }
         }
+
+        private async void datagridUtilisateurs_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            Data.Modeles.Utilisateur utilisateur = (Data.Modeles.Utilisateur)datagridUtilisateurs.SelectedItem;
+
+            if (e.EditAction == DataGridEditAction.Commit)
+            {
+                TextBox textBox = e.EditingElement as TextBox;
+
+                if (!string.IsNullOrEmpty(textBox.Text))
+                {
+                    switch (e.Column.Header)
+                    {
+                        case "Username":
+                            utilisateur.Username = textBox.Text;
+                            break;
+
+                        case "Password":
+                            utilisateur.Password = textBox.Text;
+                            break;
+                    }
+
+                    await Service.GestionUtilisateursService.ModifierUtilisateur(utilisateur);
+                    return;
+                } 
+                else
+                {
+                    ContentDialog dialogErreur = new ContentDialog
+                    {
+                        Title = "Erreur",
+                        Content = "Erreur lors de la saisie veuillez recommencer",
+                        CloseButtonText = "Ok"
+                    };
+
+                    await dialogErreur.ShowAsync();
+                    e.Cancel = true;
+                    users = await Service.GestionUtilisateursService.RecupererTousUtilisateurs();
+                    datagridUtilisateurs.ItemsSource = users.ToList();
+
+                    return;
+                }
+            }
+        }
     }
 }
