@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,6 +36,33 @@ namespace AP1_WINUI.Visiteurs
             base.OnNavigatedTo(e);
 
             user = e.Parameter as Data.Modeles.Utilisateur;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var fiche in user.FicheFrais)
+            {
+                ListViewItem item = new ListViewItem();
+                StackPanel stackPanel = new StackPanel();
+
+                TextBlock textBlock = new TextBlock
+                {
+                    Text = "Fiche de frais du " + fiche.Date.Month.ToString() + "/" + fiche.Date.Year.ToString(),
+                    FontSize = 24
+                };
+                TextBlock etat = new TextBlock
+                {
+                    Text = "Etat : " + fiche.Etat.ToString(),
+                    FontSize = 18
+                };
+
+                stackPanel.Children.Add(textBlock);
+                stackPanel.Children.Add(etat);
+
+                item.Content = stackPanel;
+                item.Padding = new Thickness(20, 9, 20, 9);
+                ListFiches.Items.Add(item);
+            }
         }
     }
 }

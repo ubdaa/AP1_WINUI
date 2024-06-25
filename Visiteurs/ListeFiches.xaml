@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
 
     <ScrollViewer>
         <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
@@ -15,11 +15,13 @@
             </StackPanel>
             <StackPanel Padding="0,100,0,0">
                 <ListView x:Name="ListFiches">
-                    <Rectangle Height="1" Fill="LightGray" />
+                    <!-- <Rectangle Height="1" Fill="LightGray" />
                     <ListViewItem>
-                        <TextBlock Text="Fiche 1" FontSize="24" />
-                    </ListViewItem>
-                    <Rectangle Height="1" Fill="LightGray" />
+                        <StackPanel>
+                            <TextBlock Text="Fiche" FontSize="24" />
+                            <TextBlock Text="etat" FontSize="18" />
+                        </StackPanel>                    
+                    </ListViewItem>-->
                 </ListView>
             </StackPanel>
         </Grid>
