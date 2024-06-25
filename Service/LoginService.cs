@@ -15,6 +15,7 @@ namespace AP1_WINUI.Service
             {
                 string query = "SELECT * FROM utilisateur WHERE username = @username AND mdp = @password";
                 var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@username", username }, { "@password", password } });
+
                 if (reader.Read())
                 {
                     var utilisateur = new Utilisateur
@@ -26,6 +27,10 @@ namespace AP1_WINUI.Service
                     };
 
                     user = utilisateur;
+                }
+                else
+                {
+                    throw new Exception(); 
                 }
             }
             catch
@@ -56,6 +61,10 @@ namespace AP1_WINUI.Service
                     };
 
                     user = utilisateur;
+                }
+                else
+                {
+                    throw new Exception();
                 }
             }
             catch
@@ -89,6 +98,8 @@ namespace AP1_WINUI.Service
 
                     user.FicheFrais.Add(fiche);
                 }
+                if (!reader.Read())
+                    throw new Exception();
                 Data.SQL.Disconnect();
                 return user;
             }

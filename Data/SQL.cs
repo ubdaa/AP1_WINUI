@@ -53,6 +53,7 @@ namespace AP1_WINUI.Data
             }
 
             MySqlDataReader reader = await cmd.ExecuteReaderAsync();
+
             return reader;
         }
 
