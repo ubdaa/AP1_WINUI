@@ -8,7 +8,20 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}">
-        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Liste fiches" VerticalAlignment="Center" FontSize="72" />
-    </Grid>
+    <ScrollViewer>
+        <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Liste fiches" VerticalAlignment="Top" FontSize="72" />
+            </StackPanel>
+            <StackPanel Padding="0,100,0,0">
+                <ListView x:Name="ListFiches">
+                    <Rectangle Height="1" Fill="LightGray" />
+                    <ListViewItem>
+                        <TextBlock Text="Fiche 1" FontSize="24" />
+                    </ListViewItem>
+                    <Rectangle Height="1" Fill="LightGray" />
+                </ListView>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer> 
 </Page>

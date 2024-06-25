@@ -97,9 +97,7 @@ namespace AP1_WINUI.Service
                     };
 
                     user.FicheFrais.Add(fiche);
-                }
-                if (!reader.Read())
-                    throw new Exception();
+                } 
                 Data.SQL.Disconnect();
                 return user;
             }

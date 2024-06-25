@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AP1_WINUI.Data.Modeles;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +23,18 @@ namespace AP1_WINUI.Visiteurs
     /// </summary>
     public sealed partial class ListeFiches : Page
     {
+        Utilisateur user = null;
+
         public ListeFiches()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            user = e.Parameter as Data.Modeles.Utilisateur;
         }
     }
 }
