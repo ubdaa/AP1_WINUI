@@ -258,6 +258,20 @@ namespace AP1_WINUI.Visiteurs
             await RefreshFiche();
             ChargerForfait();
             ChargerHorsForfait();
+
+            InitialisationConsultation();
+        }
+
+        private void InitialisationConsultation()
+        {
+            if (consultation)
+            {
+                OutilsForfait.Visibility = Visibility.Collapsed;
+                OutilsHorsForfaits.Visibility = Visibility.Collapsed;
+            } else
+            {
+                RetourConsultationBtn.Visibility = Visibility.Collapsed;
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -303,6 +317,9 @@ namespace AP1_WINUI.Visiteurs
                     break;
                 case "Montant":
                     e.Column.IsReadOnly = true;
+                    break;
+                case "Quantite":
+                    if (consultation) e.Column.IsReadOnly = true;
                     break;
                 case "Etat":
                     e.Column.IsReadOnly = true;
@@ -365,7 +382,7 @@ namespace AP1_WINUI.Visiteurs
                     e.Column.IsReadOnly = true;
                     break;
                 case "Montant":
-                    e.Column.IsReadOnly = false;
+                    if (consultation) e.Column.IsReadOnly = true;
                     break;
                 case "Etat":
                     e.Column.IsReadOnly = true;
@@ -400,5 +417,10 @@ namespace AP1_WINUI.Visiteurs
 
         #endregion
 
+        private async void RetourConsultationBtn_Click(object sender, RoutedEventArgs e)
+        {
+            utilisateur = await Service.LoginService.RecupFicheFrais(utilisateur);
+            this.Frame.Navigate(typeof(ListeFiches), utilisateur);
+        }
     }
 }

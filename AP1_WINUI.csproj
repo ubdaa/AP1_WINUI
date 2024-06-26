@@ -125,6 +125,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Comptable.xaml.cs">
+      <DependentUpon>Comptable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\Modeles\FicheFrais.cs" />
     <Compile Include="Data\Modeles\Frais.cs" />
     <Compile Include="Data\Modeles\Utilisateur.cs" />
@@ -188,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Administrateurs\GestionUtilisateurs.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Comptable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

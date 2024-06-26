@@ -78,7 +78,7 @@ namespace AP1_WINUI.Service
         }
 
 
-        private static async Task<Utilisateur> RecupFicheFrais(Utilisateur user)
+        public static async Task<Utilisateur> RecupFicheFrais(Utilisateur user)
         {
             try
             {

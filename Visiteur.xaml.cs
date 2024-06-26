@@ -24,7 +24,7 @@ namespace AP1_WINUI
     /// </summary>
     public sealed partial class Visiteur : Page
     {
-        Data.Modeles.FicheFrais fiche = null;
+        NavigationParamFicheFrais param = null;
         Data.Modeles.Utilisateur user;
 
         public Visiteur()
@@ -40,7 +40,7 @@ namespace AP1_WINUI
             switch (selectedItemContent)
             {
                 case "Éditer":
-                    contentFrame.Navigate(typeof(FicheFrais), fiche);
+                    contentFrame.Navigate(typeof(FicheFrais), param);
                     break;
                 case "Listes des fiches":
                     contentFrame.Navigate(typeof(ListeFiches), user);
@@ -57,6 +57,7 @@ namespace AP1_WINUI
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            Data.Modeles.FicheFrais fiche = null;
             foreach (var item in user.FicheFrais)
             {
                 if (
@@ -75,14 +76,13 @@ namespace AP1_WINUI
                 user.FicheFrais.Add(fiche);
             }
 
-            nvVisit.SelectedItem = nvVisit.MenuItems[0];
-
-            NavigationParamFicheFrais param = new NavigationParamFicheFrais
+            param = new NavigationParamFicheFrais
             {
                 ficheFrais = fiche,
                 Consultation = false
             };
 
+            nvVisit.SelectedItem = nvVisit.MenuItems[0];
             contentFrame.Navigate(typeof(FicheFrais), param);
         }
     }

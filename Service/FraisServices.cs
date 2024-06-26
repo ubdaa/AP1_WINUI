@@ -50,7 +50,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "INSERT INTO fiche_de_frais (date_fiche, utilisateur, etat) VALUES (@date, @utilisateur, @etat)";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@date", date }, { "@utilisateur", userName }, { "@etat", EtatFiche.ATTENTE } } );
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@date", date }, { "@utilisateur", userName }, { "@etat", EtatFiche.COURS } } );
                 Data.SQL.Disconnect();
             }
             catch (Exception e)
