@@ -29,6 +29,23 @@ namespace AP1_WINUI.Visiteurs
         public ListeFiches()
         {
             this.InitializeComponent();
+
+
+            ListFiches.IsItemClickEnabled = true;
+        }
+        private async void ListFiches_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var clickedItem = e.ClickedItem as StackPanel;
+            if (clickedItem != null)
+            {
+                var textBlock = clickedItem.Children[0] as TextBlock;
+                if (textBlock != null)
+                {
+                    var id = clickedItem.Children[2] as TextBlock;
+                    Data.Modeles.FicheFrais ficheFrais = user.FicheFrais.Where(f => f.IdFicheFrais == int.Parse(id.Text)).FirstOrDefault();
+                    this.Frame.Navigate(typeof(FicheFrais), new NavigationParamFicheFrais { ficheFrais = ficheFrais, Consultation = true });
+                }
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -55,12 +72,19 @@ namespace AP1_WINUI.Visiteurs
                     Text = "Etat : " + fiche.Etat.ToString(),
                     FontSize = 18
                 };
+                TextBlock id = new TextBlock
+                {
+                    Text = fiche.IdFicheFrais.ToString(),
+                    Visibility = Visibility.Collapsed
+                };
 
                 stackPanel.Children.Add(textBlock);
                 stackPanel.Children.Add(etat);
+                stackPanel.Children.Add(id);
 
                 item.Content = stackPanel;
                 item.Padding = new Thickness(20, 9, 20, 9);
+
                 ListFiches.Items.Add(item);
             }
         }

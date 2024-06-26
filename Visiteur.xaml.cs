@@ -77,7 +77,13 @@ namespace AP1_WINUI
 
             nvVisit.SelectedItem = nvVisit.MenuItems[0];
 
-            contentFrame.Navigate(typeof(FicheFrais), fiche);
+            NavigationParamFicheFrais param = new NavigationParamFicheFrais
+            {
+                ficheFrais = fiche,
+                Consultation = false
+            };
+
+            contentFrame.Navigate(typeof(FicheFrais), param);
         }
     }
 }

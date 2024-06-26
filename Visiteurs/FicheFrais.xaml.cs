@@ -26,6 +26,12 @@ namespace AP1_WINUI.Visiteurs
     /// </summary>
     /// 
 
+    public class NavigationParamFicheFrais
+    {
+        public Data.Modeles.FicheFrais ficheFrais;
+        public bool Consultation = false;
+    }
+
     public sealed partial class FicheFrais : Page
     {
 
@@ -40,6 +46,8 @@ namespace AP1_WINUI.Visiteurs
         double total = 0;
         double totalForfait = 0;
         double totalHorsForfait = 0;
+
+        bool consultation = false;
 
         #region METHODES
 
@@ -256,7 +264,10 @@ namespace AP1_WINUI.Visiteurs
         {
             base.OnNavigatedTo(e);
 
-            ficheFrais = e.Parameter as Data.Modeles.FicheFrais;
+            NavigationParamFicheFrais param = e.Parameter as NavigationParamFicheFrais;
+
+            ficheFrais = param.ficheFrais;
+            consultation = param.Consultation;
         }
 
         #region FRAIS FORFAITS
