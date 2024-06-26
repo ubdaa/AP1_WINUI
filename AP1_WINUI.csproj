@@ -119,7 +119,7 @@
     <Compile Include="Administrateur.xaml.cs">
       <DependentUpon>Administrateur.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Administrateurs\GestionUtilisateurs.xaml.cs">
+    <Compile Include="Frame\Administrateurs\GestionUtilisateurs.xaml.cs">
       <DependentUpon>GestionUtilisateurs.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
@@ -155,10 +155,10 @@
     <Compile Include="Visiteur.xaml.cs">
       <DependentUpon>Visiteur.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Visiteurs\FicheFrais.xaml.cs">
+    <Compile Include="Frame\Visiteurs\FicheFrais.xaml.cs">
       <DependentUpon>FicheFrais.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Visiteurs\ListeFiches.xaml.cs">
+    <Compile Include="Frame\Visiteurs\ListeFiches.xaml.cs">
       <DependentUpon>ListeFiches.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -190,7 +190,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Administrateurs\GestionUtilisateurs.xaml">
+    <Page Include="Frame\Administrateurs\GestionUtilisateurs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -222,11 +222,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Visiteurs\FicheFrais.xaml">
+    <Page Include="Frame\Visiteurs\FicheFrais.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Visiteurs\ListeFiches.xaml">
+    <Page Include="Frame\Visiteurs\ListeFiches.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -248,7 +248,9 @@
       <Version>2.3.7</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Comptables\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
