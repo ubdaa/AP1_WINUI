@@ -15,6 +15,9 @@
                     <TextBlock x:Name="Title" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Fiche frais" VerticalAlignment="Top" FontSize="72" />
                     <TextBlock x:Name="SubTitle" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="48" />
                     <TextBlock x:Name="Name" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" />
+                    <StackPanel HorizontalAlignment="Left">
+                        <Button x:Name="ExpPdfBtn" Content="Exporter en PDF" Margin="0,10,0,0" />
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Margin="0,45,0,0">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais forfaits" VerticalAlignment="Top" FontSize="30" />
@@ -31,7 +34,7 @@
                                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CellEditEnding="datagridForfait_CellEditEnding" />
                     <TextBlock x:Name="TotalForfait" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Montant total des frais forfait : " VerticalAlignment="Top" FontSize="20" Margin="0,10,0,0" />
                 </StackPanel>
-                
+
                 <StackPanel Margin="0,45,0,0">
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
                     <CommandBar VerticalAlignment="Top" HorizontalAlignment="Left">
@@ -46,6 +49,11 @@
                     <controls:DataGrid x:Name="datagridHorsForfait" Height="auto" AutoGenerateColumns="True" Margin="0,5,0,0"
                                        CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" AutoGeneratingColumn="datagridHorsForfait_AutoGeneratingColumn" 
                                        CellEditEnding="datagridHorsForfait_CellEditEnding"/>
+                    <TextBlock x:Name="TotalHorsForfait" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Montant total des frais hors forfait : " VerticalAlignment="Top" FontSize="20" Margin="0,10,0,0" />
+                </StackPanel>
+                <StackPanel>
+                    <Rectangle Height="1" Fill="LightGray" Margin="0,80,0,20"/>
+                    <TextBlock x:Name="TotalFiche" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Total des frais : " VerticalAlignment="Top" FontSize="30" />
                 </StackPanel>
             </StackPanel>
         </Grid>

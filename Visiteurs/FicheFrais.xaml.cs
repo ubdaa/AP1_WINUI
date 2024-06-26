@@ -38,6 +38,8 @@ namespace AP1_WINUI.Visiteurs
         List<Forfait> listForfait;
 
         double total = 0;
+        double totalForfait = 0;
+        double totalHorsForfait = 0;
 
         #region METHODES
 
@@ -116,12 +118,14 @@ namespace AP1_WINUI.Visiteurs
                 foreach (Forfait f in ficheFrais.Forfaits) total += (f.Montant * f.Quantite);
                 total = Math.Round(total, 2);
                 TotalForfait.Text = "Total des Frais Forfaits : " + total + " €";
+                totalForfait = total;
 
                 if (ficheFrais.Forfaits.Count == 0) TotalForfait.Visibility = Visibility.Collapsed;
                 else TotalForfait.Visibility = Visibility.Visible;
             }
 
             datagridForfait.ItemsSource = ficheFrais.Forfaits.ToList();
+            ChangerTotalFiche();
         }
 
         #endregion
@@ -193,18 +197,20 @@ namespace AP1_WINUI.Visiteurs
             datagridHorsForfait.ItemsSource = null;
             ficheFrais.HorsForfaits.Sort((x, y) => DateTime.Parse(x.Date).CompareTo(DateTime.Parse(y.Date)));
 
-            // Calcul du total des frais forfaits et visibilité du texte
-            /*{
+            // Calcul du total des frais hors forfaits et visibilité du texte
+            {
                 total = 0;
-                foreach (Forfait f in ficheFrais.Forfaits) total += (f.Montant * f.Quantite);
+                foreach (HorsForfait f in ficheFrais.HorsForfaits) total += f.Montant;
                 total = Math.Round(total, 2);
-                TotalForfait.Text = "Total des Frais Forfaits : " + total + " €";
+                TotalHorsForfait.Text = "Total des Frais Hors Forfaits : " + total + " €";
+                totalHorsForfait = total;
 
-                if (ficheFrais.Forfaits.Count == 0) TotalForfait.Visibility = Visibility.Collapsed;
-                else TotalForfait.Visibility = Visibility.Visible;
-            }*/
+                if (ficheFrais.HorsForfaits.Count == 0) TotalHorsForfait.Visibility = Visibility.Collapsed;
+                else TotalHorsForfait.Visibility = Visibility.Visible;
+            }
 
             datagridHorsForfait.ItemsSource = ficheFrais.HorsForfaits.ToList();
+            ChangerTotalFiche();
         }
 
         #endregion
@@ -213,6 +219,11 @@ namespace AP1_WINUI.Visiteurs
         {
             ficheFrais.Forfaits = await Service.FraisServices.RecupForfait(ficheFrais.IdFicheFrais);
             ficheFrais.HorsForfaits = await Service.FraisServices.RecupHorsForfait(ficheFrais.IdFicheFrais);
+        }
+
+        private void ChangerTotalFiche()
+        {
+            TotalFiche.Text = "Total de la fiche : " + (totalForfait + totalHorsForfait) + " €";
         }
 
         #endregion
