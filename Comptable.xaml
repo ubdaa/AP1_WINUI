@@ -5,10 +5,21 @@
     xmlns:local="using:AP1_WINUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
 
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Content="Validation Fiche" Icon="Edit"/>
+                <!--<muxc:NavigationViewItem Content="Chercher par utilisateur" Icon="List"/>-->
+            </muxc:NavigationView.MenuItems>
+            <Frame x:Name="contentFrame"/>
+        </muxc:NavigationView>
     </Grid>
 </Page>

@@ -26,5 +26,15 @@ namespace AP1_WINUI
         {
             this.InitializeComponent();
         }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void nvVisit_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
+        {
+
+        }
     }
 }
