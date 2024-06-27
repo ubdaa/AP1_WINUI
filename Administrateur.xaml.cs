@@ -35,6 +35,10 @@ namespace AP1_WINUI
                 case "Gestion utilisateurs":
                     contentFrame.Navigate(typeof(Administrateurs.GestionUtilisateurs));
                     break;
+                case "Se déconnecter":
+                    Utilitaire utilitaire = new Utilitaire();
+                    utilitaire.SeDeconnecter();
+                    break;
             }
         }
 

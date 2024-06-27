@@ -34,6 +34,21 @@ namespace AP1_WINUI
 
         private void nvVisit_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)
         {
+            var selectedItem = (Microsoft.UI.Xaml.Controls.NavigationViewItem)args.SelectedItem;
+            string selectedItemContent = (string)selectedItem.Content;
+
+            switch (selectedItemContent)
+            {
+                case "Validation Fiches":
+                    contentFrame.Navigate(typeof(Comptables.FichesValidation));
+                    break;
+                case "Chercher par utilisateur":
+                    break;
+                case "Se déconnecter":
+                    Utilitaire utilitaire = new Utilitaire();
+                    utilitaire.SeDeconnecter();
+                    break;
+            }
 
         }
     }

@@ -43,8 +43,27 @@ namespace AP1_WINUI.Service
             return ficheFrais;
         }
 
+        private static async Task ModificationEtat()
+        {
+            try
+            {
+                string Query = "UPDATE fiche_de_frais SET etat = @etat WHERE etat = @etat2";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", EtatFiche.ATTENTE }, { "@etat2", EtatFiche.COURS } });
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification de l'état de la fiche de frais " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+            }
+        }
+
         public static async Task<FicheFrais> CreationFicheFrais(int userName, DateTime date)
         {
+            await ModificationEtat();
+
             FicheFrais fiches = new FicheFrais();
 
             try

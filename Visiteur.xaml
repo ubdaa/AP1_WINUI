@@ -14,10 +14,11 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged">
+        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Content="Éditer" Icon="Edit"/>
                 <muxc:NavigationViewItem Content="Listes des fiches" Icon="List"/>
+                <muxc:NavigationViewItem Content="Se déconnecter" Icon="Import"/>
             </muxc:NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </muxc:NavigationView>

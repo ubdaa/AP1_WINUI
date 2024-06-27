@@ -119,6 +119,9 @@
     <Compile Include="Administrateur.xaml.cs">
       <DependentUpon>Administrateur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Comptables\FichesValidation.xaml.cs">
+      <DependentUpon>FichesValidation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Frame\Administrateurs\GestionUtilisateurs.xaml.cs">
       <DependentUpon>GestionUtilisateurs.xaml</DependentUpon>
     </Compile>
@@ -152,6 +155,8 @@
     <Compile Include="Service\FraisServices.cs" />
     <Compile Include="Service\GestionUtilisateursService.cs" />
     <Compile Include="Service\LoginService.cs" />
+    <Compile Include="Service\ValidationService.cs" />
+    <Compile Include="Utilitaire.cs" />
     <Compile Include="Visiteur.xaml.cs">
       <DependentUpon>Visiteur.xaml</DependentUpon>
     </Compile>
@@ -189,6 +194,10 @@
     <Page Include="Administrateur.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Comptables\FichesValidation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Frame\Administrateurs\GestionUtilisateurs.xaml">
       <SubType>Designer</SubType>
@@ -248,9 +257,7 @@
       <Version>2.3.7</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Comptables\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

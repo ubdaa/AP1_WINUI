@@ -14,10 +14,11 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged">
+        <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Content="Validation Fiche" Icon="Edit"/>
-                <!--<muxc:NavigationViewItem Content="Chercher par utilisateur" Icon="List"/>-->
+                <muxc:NavigationViewItem Content="Chercher par utilisateur" Icon="Find"/>
+                <muxc:NavigationViewItem Content="Se déconnecter" Icon="Import"/>
             </muxc:NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>
         </muxc:NavigationView>

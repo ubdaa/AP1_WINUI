@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="AP1_WINUI.Comptables.FichesValidation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AP1_WINUI.Comptables"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
+
+    <ScrollViewer>
+        <Grid Background="{ThemeResource AutoSuggestBackgroundThemeBrush}" Padding="50,50,50,50">
+            <StackPanel>
+                <StackPanel>
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Fiches de frais à valider" VerticalAlignment="Top" FontSize="72" />
+                </StackPanel>
+                <StackPanel>
+                    <ListView x:Name="ListFiches" ItemClick="ListFiches_ItemClick">
+                    </ListView>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer> 
+</Page>

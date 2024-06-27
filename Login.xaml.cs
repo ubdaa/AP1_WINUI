@@ -46,6 +46,9 @@ namespace AP1_WINUI
                 case Role.ADMIN:
                     Frame.Navigate(typeof(Administrateur), user);
                     break;
+                case Role.COMPTABLE:
+                    Frame.Navigate(typeof(Comptable), user);
+                    break;
             }
         }
     }
