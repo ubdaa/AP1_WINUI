@@ -480,5 +480,10 @@ namespace AP1_WINUI.Visiteurs
 
             await contentDialog.ShowAsync();
         }
+
+        private void ExpPdfBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

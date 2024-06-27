@@ -119,6 +119,7 @@
     <Compile Include="Administrateur.xaml.cs">
       <DependentUpon>Administrateur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\ExportPDF.cs" />
     <Compile Include="Comptables\FichesValidation.xaml.cs">
       <DependentUpon>FichesValidation.xaml</DependentUpon>
     </Compile>
@@ -159,7 +160,7 @@
     <Compile Include="Service\GestionUtilisateursService.cs" />
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\ValidationService.cs" />
-    <Compile Include="Utilitaire.cs" />
+    <Compile Include="Classes\Utilitaire.cs" />
     <Compile Include="Visiteur.xaml.cs">
       <DependentUpon>Visiteur.xaml</DependentUpon>
     </Compile>
@@ -248,6 +249,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="iTextSharp">
+      <Version>5.5.13.4</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
     </PackageReference>
