@@ -1,9 +1,11 @@
 ﻿using AP1_WINUI.Data.Modeles;
+using AP1_WINUI.Service;
 using AP1_WINUI.Visiteurs;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -25,15 +27,15 @@ namespace AP1_WINUI.Comptables
     /// </summary>
     public sealed partial class FichesValidation : Page
     {
-        Utilisateur user = null;
+        List<Data.Modeles.FicheFrais> listFichesFrais;
 
         public FichesValidation()
         {
             this.InitializeComponent();
 
-
             ListFiches.IsItemClickEnabled = true;
         }
+
         private async void ListFiches_ItemClick(object sender, ItemClickEventArgs e)
         {
             var clickedItem = e.ClickedItem as StackPanel;
@@ -43,22 +45,25 @@ namespace AP1_WINUI.Comptables
                 if (textBlock != null)
                 {
                     var id = clickedItem.Children[2] as TextBlock;
-                    Data.Modeles.FicheFrais ficheFrais = user.FicheFrais.Where(f => f.IdFicheFrais == int.Parse(id.Text)).FirstOrDefault();
-                    this.Frame.Navigate(typeof(Visiteurs.FicheFrais), new NavigationParamFicheFrais { ficheFrais = ficheFrais, Consultation = true });
+                    Data.Modeles.FicheFrais ficheFrais = await FraisServices.RecupFicheFrais(int.Parse(id.Text));
+                    this.Frame.Navigate(typeof(Visiteurs.FicheFrais), new NavigationParamFicheFrais { ficheFrais = ficheFrais, Consultation = true, Validation = true });
                 }
             }
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            base.OnNavigatedTo(e);
+            listFichesFrais = await ValidationService.RecupFichesFraisAValider();
 
-            user = e.Parameter as Data.Modeles.Utilisateur;
-        }
+            if (listFichesFrais.Count != 0)
+            {
+                TextFichesVide.Visibility = Visibility.Collapsed;
+            } else
+            {
+                return;
+            }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            foreach (var fiche in user.FicheFrais)
+            foreach (var fiche in listFichesFrais)
             {
                 ListViewItem item = new ListViewItem();
                 StackPanel stackPanel = new StackPanel();
@@ -70,7 +75,7 @@ namespace AP1_WINUI.Comptables
                 };
                 TextBlock etat = new TextBlock
                 {
-                    Text = "Etat : " + fiche.Etat.ToString(),
+                    Text = "Etat : " + fiche.Etat.ToString() + ". Par l'utilisateur : " + (await LoginService.NomUtilisateur(fiche.IdUtilisateur)),
                     FontSize = 18
                 };
                 TextBlock id = new TextBlock

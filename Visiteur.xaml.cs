@@ -46,8 +46,7 @@ namespace AP1_WINUI
                     contentFrame.Navigate(typeof(ListeFiches), user);
                     break;
                 case "Se déconnecter":
-                    Utilitaire utilitaire = new Utilitaire();
-                    utilitaire.SeDeconnecter();
+                    Utilitaire.SeDeconnecter();
                     break;
             }
         }

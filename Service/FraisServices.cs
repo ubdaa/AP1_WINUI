@@ -27,6 +27,39 @@ namespace AP1_WINUI.Service
                     ficheFrais.IdUtilisateur = reader.GetInt32("utilisateur");
                     ficheFrais.Etat = (EtatFiche)reader.GetInt32("etat");
                     ficheFrais.Forfaits = await RecupForfait(ficheFrais.IdFicheFrais);
+                    ficheFrais.HorsForfaits = await RecupHorsForfait(ficheFrais.IdFicheFrais);
+                }
+                Data.SQL.Disconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Disconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération de la fiche de frais " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return ficheFrais;
+        }
+
+        public static async Task<FicheFrais> RecupFicheFrais(int idFiche)
+        {
+            FicheFrais ficheFrais = new FicheFrais();
+
+            try
+            {
+                string Query = "SELECT * FROM fiche_de_frais WHERE id_fiche = @id_fiche";
+                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
+                if (reader.Read())
+                {
+                    ficheFrais.IdFicheFrais = reader.GetInt32("id_fiche");
+                    ficheFrais.Date = reader.GetDateTime("date_fiche");
+                    ficheFrais.IdUtilisateur = reader.GetInt32("utilisateur");
+                    ficheFrais.Etat = (EtatFiche)reader.GetInt32("etat");
+                    ficheFrais.Forfaits = await RecupForfait(ficheFrais.IdFicheFrais);
+                    ficheFrais.HorsForfaits = await RecupHorsForfait(ficheFrais.IdFicheFrais);
                 }
                 Data.SQL.Disconnect();
             }

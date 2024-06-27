@@ -11,7 +11,7 @@ namespace AP1_WINUI
 {
     public class Utilitaire : Page
     {
-        public void SeDeconnecter()
+        public static void SeDeconnecter()
         {
             var frame = Window.Current.Content as Frame;
 

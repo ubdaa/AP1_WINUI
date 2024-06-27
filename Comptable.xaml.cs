@@ -39,14 +39,13 @@ namespace AP1_WINUI
 
             switch (selectedItemContent)
             {
-                case "Validation Fiches":
+                case "Validation Fiche":
                     contentFrame.Navigate(typeof(Comptables.FichesValidation));
                     break;
                 case "Chercher par utilisateur":
                     break;
                 case "Se déconnecter":
-                    Utilitaire utilitaire = new Utilitaire();
-                    utilitaire.SeDeconnecter();
+                    Utilitaire.SeDeconnecter();
                     break;
             }
 

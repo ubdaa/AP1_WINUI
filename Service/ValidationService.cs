@@ -12,11 +12,10 @@ namespace AP1_WINUI.Service
         {
             List<Data.Modeles.FicheFrais> fichesFrais = new List<Data.Modeles.FicheFrais>();
 
-            string Query = "SELECT * FROM FicheFrais WHERE Etat = 'ATTENTE'";
-
             try
             {
-                var reader = await Data.SQL.ExecuteQuery(Query);
+                string Query = "SELECT * FROM fiche_de_frais WHERE etat = @etat";
+                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@etat", 1 } });
 
                 while (reader.Read())
                 {
@@ -24,8 +23,8 @@ namespace AP1_WINUI.Service
                     {
                         IdFicheFrais = reader.GetInt32("id_fiche"),
                         Date = reader.GetDateTime("date_fiche"),
-                        IdUtilisateur = reader.GetInt32("id_utilisateur"),
-                        Etat = (Data.Modeles.EtatFiche)Enum.Parse(typeof(Data.Modeles.EtatFiche), reader.GetString("etat")),
+                        IdUtilisateur = reader.GetInt32("utilisateur"),
+                        Etat = (Data.Modeles.EtatFiche)reader.GetInt32("etat"),
                         Forfaits = null,
                         HorsForfaits = null
                     };

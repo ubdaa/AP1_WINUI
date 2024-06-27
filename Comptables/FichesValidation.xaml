@@ -15,6 +15,7 @@
                     <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Fiches de frais à valider" VerticalAlignment="Top" FontSize="72" />
                 </StackPanel>
                 <StackPanel>
+                    <TextBlock x:Name="TextFichesVide" HorizontalAlignment="Center" TextWrapping="Wrap" Text="Aucune Fiches à valider !" VerticalAlignment="Top" FontSize="36" />
                     <ListView x:Name="ListFiches" ItemClick="ListFiches_ItemClick">
                     </ListView>
                 </StackPanel>

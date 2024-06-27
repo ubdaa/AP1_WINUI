@@ -2,6 +2,7 @@
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -30,6 +31,7 @@ namespace AP1_WINUI.Visiteurs
     {
         public Data.Modeles.FicheFrais ficheFrais;
         public bool Consultation = false;
+        public bool Validation = false;
     }
 
     public sealed partial class FicheFrais : Page
@@ -48,6 +50,7 @@ namespace AP1_WINUI.Visiteurs
         double totalHorsForfait = 0;
 
         bool consultation = false;
+        bool validation = false;
 
         #region METHODES
 
@@ -282,6 +285,7 @@ namespace AP1_WINUI.Visiteurs
 
             ficheFrais = param.ficheFrais;
             consultation = param.Consultation;
+            validation = param.Validation;
         }
 
         #region FRAIS FORFAITS
@@ -419,8 +423,14 @@ namespace AP1_WINUI.Visiteurs
 
         private async void RetourConsultationBtn_Click(object sender, RoutedEventArgs e)
         {
-            utilisateur = await Service.LoginService.RecupFicheFrais(utilisateur);
-            this.Frame.Navigate(typeof(ListeFiches), utilisateur);
+            if (validation)
+            {
+                this.Frame.Navigate(typeof(Comptables.FichesValidation));
+            } else
+            {
+                utilisateur = await Service.LoginService.RecupFicheFrais(utilisateur);
+                this.Frame.Navigate(typeof(ListeFiches), utilisateur);
+            }
         }
     }
 }

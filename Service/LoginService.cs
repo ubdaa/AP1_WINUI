@@ -129,5 +129,31 @@ namespace AP1_WINUI.Service
             await dialog2.ShowAsync();
             return null;
         }
+
+        public static async Task<string> NomUtilisateur(int idUtilisateur)
+        {
+            string nom = "";
+            try
+            {
+                string query = "SELECT username FROM utilisateur WHERE id_utilisateur = @id";
+                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
+                if (reader.Read())
+                {
+                    nom = reader.GetString("username");
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération du nom de l'utilisateur", "Erreur lors de la connexion");
+                await dialog.ShowAsync();
+            }
+
+            Data.SQL.Disconnect();
+            return nom;
+        }
     }
 }
