@@ -10,12 +10,19 @@ using System.Text;
 using System.Threading.Tasks;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using AP1_WINUI.Data.Modeles;
+using AP1_WINUI.Service;
 
 namespace AP1_WINUI
 {
     internal class ExportPDF
     {
-        public static void ConvertirFicheEnPdf(Data.Modeles.FicheFrais ficheFrais, string cheminFichier, string titre)
+        public static PdfPTable ConvertListToTablePdf(List<object> list)
+        {
+            return null;
+        }
+
+        public static async void ConvertirFicheEnPdf(Data.Modeles.FicheFrais ficheFrais, string cheminFichier, string titre)
         {
             string directory = Path.GetDirectoryName(cheminFichier);
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
@@ -26,12 +33,20 @@ namespace AP1_WINUI
 
             // Ajouter le titre
             {
-                Font titleFont = FontFactory.GetFont("Sogoe UI", 18, Font.BOLD);
-                Font titleDescript = FontFactory.GetFont("Sogoe UI", 10);
+                Font titleFont = FontFactory.GetFont("Sogoe UI", 24, Font.BOLD);
+                Font titleDescript = FontFactory.GetFont("Sogoe UI", 16);
 
-                Paragraph title = new Paragraph(titre, titleFont);
-                document.Add(title);
+                Paragraph p = new Paragraph("Fiche Frais", titleFont);
+                document.Add(p);
                 document.Add(new Paragraph("\n"));
+
+                p = new Paragraph("11 " + ficheFrais.Date.ToString("MMMM yyyy") + " - 10 " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy"), titleDescript);
+                document.Add(p);
+
+                p = new Paragraph("De " + (await LoginService.NomUtilisateur(ficheFrais.IdUtilisateur)) + " - Fiche n°" + ficheFrais.IdFicheFrais + " - Etat fiche : " + ficheFrais.Etat.ToString(), titleDescript);
+                document.Add(p);
+                document.Add(new Paragraph("\n"));
+
             }
 
             //pour la table
