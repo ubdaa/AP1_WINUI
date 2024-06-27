@@ -29,7 +29,8 @@ namespace AP1_WINUI
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-
+            nvVisit.SelectedItem = nvVisit.MenuItems[0];
+            contentFrame.Navigate(typeof(Comptables.FichesValidation));
         }
 
         private void nvVisit_SelectionChanged(Microsoft.UI.Xaml.Controls.NavigationView sender, Microsoft.UI.Xaml.Controls.NavigationViewSelectionChangedEventArgs args)

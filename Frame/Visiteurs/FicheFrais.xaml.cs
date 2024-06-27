@@ -263,6 +263,7 @@ namespace AP1_WINUI.Visiteurs
             ChargerHorsForfait();
 
             InitialisationConsultation();
+            InitialisationValidation();
         }
 
         private void InitialisationConsultation()
@@ -274,6 +275,14 @@ namespace AP1_WINUI.Visiteurs
             } else
             {
                 RetourConsultationBtn.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void InitialisationValidation()
+        {
+            if (!validation)
+            {
+                EffectActionBtn.Visibility = Visibility.Collapsed;
             }
         }
 
