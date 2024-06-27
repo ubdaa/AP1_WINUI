@@ -22,6 +22,11 @@ namespace AP1_WINUI.Popups
     /// </summary>
     public sealed partial class ActionComptable : Page
     {
+        public ComboBox ActionsComptables { 
+            get { return comboBoxActionComptable; } 
+            set { comboBoxActionComptable = value; }
+        }
+
         public ActionComptable()
         {
             this.InitializeComponent();

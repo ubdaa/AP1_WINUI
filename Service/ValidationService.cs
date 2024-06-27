@@ -43,5 +43,29 @@ namespace AP1_WINUI.Service
 
             return fichesFrais;
         }
+
+        public static async Task<bool> ChangerEtatFiche(int idFiche, int etat, int etatFrais)
+        {
+            try
+            {
+                string Query = "UPDATE fiche_de_frais SET etat = @etat WHERE id_fiche = @id_fiche";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etat }, { "@id_fiche", idFiche } });
+
+                Query = "UPDATE forfait SET etat = @etat WHERE fiche_frais = @id_fiche";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
+
+                Query = "UPDATE hors_forfait SET etat = @etat WHERE fiche_frais = @id_fiche";
+                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
+
+                Data.SQL.Disconnect();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Data.SQL.Disconnect();
+                return false;
+            }
+        }
     }
 }

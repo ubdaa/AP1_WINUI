@@ -1,4 +1,6 @@
 ﻿using AP1_WINUI.Data.Modeles;
+using AP1_WINUI.Popups;
+using AP1_WINUI.Service;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -256,7 +258,7 @@ namespace AP1_WINUI.Visiteurs
             utilisateur = await Service.LoginService.UtilisateurBase(ficheFrais.IdUtilisateur);
 
             SubTitle.Text = "11 " + ficheFrais.Date.ToString("MMMM yyyy") + " - 10 " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy");
-            Name.Text = "De " + utilisateur.Username + " - Fiche n°" + ficheFrais.IdFicheFrais;
+            Name.Text = "De " + utilisateur.Username + " - Fiche n°" + ficheFrais.IdFicheFrais + " - Etat fiche : " + ficheFrais.Etat.ToString();
 
             await RefreshFiche();
             ChargerForfait();
@@ -440,6 +442,43 @@ namespace AP1_WINUI.Visiteurs
                 utilisateur = await Service.LoginService.RecupFicheFrais(utilisateur);
                 this.Frame.Navigate(typeof(ListeFiches), utilisateur);
             }
+        }
+
+        private async void EffectActionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog contentDialog = new ContentDialog();
+            contentDialog.Title = "Validation de la fiche";
+
+            ActionComptable actionComptable = new ActionComptable();
+            {
+                contentDialog.PrimaryButtonText = "Valider";
+                contentDialog.SecondaryButtonText = "Annuler";
+                contentDialog.Content = actionComptable;
+                foreach (EtatFiche etat in Enum.GetValues(typeof(EtatFiche)))
+                {
+                    if (etat == EtatFiche.COURS) continue;
+                    actionComptable.ActionsComptables.Items.Add(Enum.GetName(typeof(EtatFiche), etat));
+                }
+                contentDialog.DefaultButton = ContentDialogButton.Primary;
+            }
+
+            contentDialog.PrimaryButtonClick += async (s, args) =>
+            {
+                if (actionComptable.ActionsComptables.SelectedIndex == -1)
+                {
+                    var erreur = new Windows.UI.Popups.MessageDialog("Veuillez sélectionner une action", "Erreur");
+                    await erreur.ShowAsync();
+                    return;
+                }
+
+                int etat = actionComptable.ActionsComptables.SelectedIndex == 0 ? 1 : actionComptable.ActionsComptables.SelectedIndex + 2;
+                int etatFrais = actionComptable.ActionsComptables.SelectedIndex + 1;
+
+                await ValidationService.ChangerEtatFiche(ficheFrais.IdFicheFrais, etat, etatFrais);
+                this.Frame.Navigate(typeof(Comptables.FichesValidation));
+            };
+
+            await contentDialog.ShowAsync();
         }
     }
 }
