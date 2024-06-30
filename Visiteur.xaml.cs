@@ -43,7 +43,7 @@ namespace AP1_WINUI
                     contentFrame.Navigate(typeof(FicheFrais), param);
                     break;
                 case "Listes des fiches":
-                    contentFrame.Navigate(typeof(ListeFiches), user);
+                    contentFrame.Navigate(typeof(ListeFiches), new ListeFichesParametres { user = this.user, validation = false });
                     break;
                 case "Se déconnecter":
                     Utilitaire.SeDeconnecter();

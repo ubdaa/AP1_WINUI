@@ -440,7 +440,7 @@ namespace AP1_WINUI.Visiteurs
             } else
             {
                 utilisateur = await Service.LoginService.RecupFicheFrais(utilisateur);
-                this.Frame.Navigate(typeof(ListeFiches), utilisateur);
+                this.Frame.Navigate(typeof(ListeFiches), new ListeFichesParametres { user = utilisateur, validation = this.validation});
             }
         }
 

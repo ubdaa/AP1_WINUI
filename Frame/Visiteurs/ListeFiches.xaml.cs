@@ -19,12 +19,19 @@ using Windows.UI.Xaml.Shapes;
 
 namespace AP1_WINUI.Visiteurs
 {
+    public class ListeFichesParametres
+    {
+        public Utilisateur user = null;
+        public bool validation = false;
+    }
+
     /// <summary>
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// </summary>
     public sealed partial class ListeFiches : Page
     {
         Utilisateur user = null;
+        bool validation = false;
 
         public ListeFiches()
         {
@@ -43,7 +50,7 @@ namespace AP1_WINUI.Visiteurs
                 {
                     var id = clickedItem.Children[2] as TextBlock;
                     Data.Modeles.FicheFrais ficheFrais = user.FicheFrais.Where(f => f.IdFicheFrais == int.Parse(id.Text)).FirstOrDefault();
-                    this.Frame.Navigate(typeof(FicheFrais), new NavigationParamFicheFrais { ficheFrais = ficheFrais, Consultation = true });
+                    this.Frame.Navigate(typeof(FicheFrais), new NavigationParamFicheFrais { ficheFrais = ficheFrais, Consultation = true, Validation = validation });
                 }
             }
         }
@@ -52,7 +59,9 @@ namespace AP1_WINUI.Visiteurs
         {
             base.OnNavigatedTo(e);
 
-            user = e.Parameter as Data.Modeles.Utilisateur;
+            ListeFichesParametres param = e.Parameter as ListeFichesParametres;
+            user = param.user;
+            validation = param.validation;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

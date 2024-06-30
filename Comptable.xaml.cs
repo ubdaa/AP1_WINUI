@@ -44,6 +44,7 @@ namespace AP1_WINUI
                     contentFrame.Navigate(typeof(Comptables.FichesValidation));
                     break;
                 case "Chercher par utilisateur":
+                    contentFrame.Navigate(typeof(Comptables.RechercheUtilisateur));
                     break;
                 case "Se déconnecter":
                     Utilitaire.SeDeconnecter();

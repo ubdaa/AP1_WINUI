@@ -11,8 +11,7 @@ namespace AP1_WINUI.Data.Modeles
         ATTENTE = 1,
         COURS = 2,
         ACCEPTE = 3,
-        REFUSE = 4,
-        REFUS_PARTIEL = 5
+        REFUSE = 4
     }
 
     public class FicheFrais

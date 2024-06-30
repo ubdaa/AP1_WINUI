@@ -123,6 +123,9 @@
     <Compile Include="Comptables\FichesValidation.xaml.cs">
       <DependentUpon>FichesValidation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Comptables\RechercheUtilisateur.xaml.cs">
+      <DependentUpon>RechercheUtilisateur.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Frame\Administrateurs\GestionUtilisateurs.xaml.cs">
       <DependentUpon>GestionUtilisateurs.xaml</DependentUpon>
     </Compile>
@@ -159,6 +162,7 @@
     <Compile Include="Service\FraisServices.cs" />
     <Compile Include="Service\GestionUtilisateursService.cs" />
     <Compile Include="Service\LoginService.cs" />
+    <Compile Include="Service\RechercheService.cs" />
     <Compile Include="Service\ValidationService.cs" />
     <Compile Include="Classes\Utilitaire.cs" />
     <Compile Include="Visiteur.xaml.cs">
@@ -202,6 +206,10 @@
     <Page Include="Comptables\FichesValidation.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Comptables\RechercheUtilisateur.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Frame\Administrateurs\GestionUtilisateurs.xaml">
       <SubType>Designer</SubType>
