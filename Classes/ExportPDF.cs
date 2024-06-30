@@ -12,14 +12,52 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using AP1_WINUI.Data.Modeles;
 using AP1_WINUI.Service;
+using System.Reflection;
 
 namespace AP1_WINUI
 {
     internal class ExportPDF
     {
-        public static PdfPTable ConvertListToTablePdf(List<object> list)
+        public static PdfPTable ConvertListToTablePdf<T>(List<T> list)
         {
-            return null;
+            Type type = list.GetType();
+            int nombreAttributs = type.GetFields(BindingFlags.Public | BindingFlags.Instance).Length;
+
+            BaseColor headerRow = new BaseColor(227, 227, 227);
+            PdfPTable table = new PdfPTable(nombreAttributs);
+            table.WidthPercentage = 100;
+
+            // colonne des header de table
+            if (list is List<Forfait>)
+            {
+                PdfPCell cell = new PdfPCell(new Phrase("Date"));
+                cell.BackgroundColor = headerRow;
+                table.AddCell(cell);
+
+                //PdfPCell cell = new PdfPCell(new Phrase("Nom"));
+                cell.BackgroundColor = headerRow;
+                table.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Montant"));
+                cell.BackgroundColor = headerRow;
+                table.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Quantite"));
+                cell.BackgroundColor = headerRow;
+                table.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase("Total"));
+                cell.BackgroundColor = headerRow;
+                table.AddCell(cell);
+            }
+
+            foreach (object item in list)
+            {
+                PdfPCell cell = new PdfPCell(new Phrase(item.ToString()));
+                table.AddCell(cell);
+            }
+
+            return table;
         }
 
         public static async void ConvertirFicheEnPdf(Data.Modeles.FicheFrais ficheFrais, string cheminFichier, string titre)
@@ -49,75 +87,7 @@ namespace AP1_WINUI
 
             }
 
-            //pour la table
-            /*{
-                BaseColor colEcart = new BaseColor(206, 245, 206);
-                BaseColor colRecalageVert = new BaseColor(144, 238, 144);
-                BaseColor colRecalageRouge = new BaseColor(240, 128, 128);
-                BaseColor colVeh = new BaseColor(245, 245, 220);
-                BaseColor headerRow = new BaseColor(227, 227, 227);
-
-                PdfPTable pdfTable = new PdfPTable(dt.Columns.Count);
-                pdfTable.WidthPercentage = 100;
-                Font font = FontFactory.GetFont("Arial", 7);
-                Font fontHeader = FontFactory.GetFont("Arial", 7, Font.BOLD);
-
-
-                float[] columnWidths = new float[dt.Columns.Count];
-                int nbColumns = dt.Columns.Count;
-                for (int i = 0; i < nbColumns; i++)
-                {
-                    columnWidths[i] = 1f;
-                }
-                pdfTable.SetWidths(columnWidths);
-
-                // Ajouter les en-têtes de colonnes
-                foreach (DataColumn column in dt.Columns)
-                {
-                    PdfPCell cell = new PdfPCell(new Phrase(column.ColumnName, fontHeader));
-                    cell.Padding = 3;
-                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    cell.BackgroundColor = headerRow;
-                    pdfTable.AddCell(cell);
-                }
-
-                // Ajouter les données de la DataTable
-                foreach (DataRow row in dt.Rows)
-                {
-                    int index = 0;
-                    foreach (object cellData in row.ItemArray)
-                    {
-                        PdfPCell cell = new PdfPCell(new Phrase(cellData.ToString(), font));
-                        cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                        cell.HorizontalAlignment = Element.ALIGN_CENTER;
-
-                        if (index == nbColumns - 2)
-                            cell.BackgroundColor = colEcart;
-                        if (index == nbColumns - 1)
-                        {
-                            int rec = int.Parse(cellData.ToString());
-                        }
-                        if (index == 0 || index == 1 || index == 2)
-                            cell.BackgroundColor = colVeh;
-
-                        cell.Padding = 3;
-                        pdfTable.AddCell(cell);
-
-                        index++;
-                    }
-                }
-                document.Add(pdfTable);
-            }
-
-            // date de génération
-            {
-                Font titleFont = FontFactory.GetFont("Arial", 7, Font.ITALIC);
-
-                Paragraph title = new Paragraph("Fichier généré à " + DateTime.Now.ToString(), titleFont);
-                title.Alignment = Element.ALIGN_RIGHT;
-                document.Add(title);
-            }*/
+            //document.Add(ConvertListToTablePdf(ficheFrais.Forfaits));
 
             document.Close();
 
