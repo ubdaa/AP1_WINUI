@@ -1,102 +1,128 @@
-﻿using iTextSharp.text.pdf;
-using iTextSharp.text;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using AP1_WINUI.Data.Modeles;
 using AP1_WINUI.Service;
-using System.Reflection;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 
 namespace AP1_WINUI
 {
     internal class ExportPDF
     {
-        public static PdfPTable ConvertListToTablePdf<T>(List<T> list)
+
+        // J'aime vraiment pas comment la méthode est écrite, y'a moyen de faire bien mieux, mais je comprends pas tout à l'UWP
+        public static async void ConvertirFicheEnPdf(Data.Modeles.FicheFrais ficheFrais, string titre)
         {
-            Type type = list.GetType();
-            int nombreAttributs = type.GetFields(BindingFlags.Public | BindingFlags.Instance).Length;
+            PdfDocument document = new PdfDocument();
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
 
-            BaseColor headerRow = new BaseColor(227, 227, 227);
-            PdfPTable table = new PdfPTable(nombreAttributs);
-            table.WidthPercentage = 100;
+            XFont policeTitre = new XFont("Segoe UI", 24, XFontStyle.Bold);
+            XFont policeInfo = new XFont("Segoe UI", 16);
+            gfx.DrawString("Fiche Frais", policeTitre, XBrushes.Black, new XRect(0, 20, page.Width, page.Height), XStringFormats.TopCenter);
+            gfx.DrawString($"11 {ficheFrais.Date:MMMM yyyy} - 10 {ficheFrais.Date.AddMonths(1):MMMM yyyy}", policeInfo, XBrushes.Black, new XRect(0, 60, page.Width, page.Height), XStringFormats.TopCenter);
+            gfx.DrawString($"De {await LoginService.NomUtilisateur(ficheFrais.IdUtilisateur)} - Fiche n°{ficheFrais.IdFicheFrais} - Etat fiche : {ficheFrais.Etat}", policeInfo, XBrushes.Black, new XRect(0, 100, page.Width, page.Height), XStringFormats.TopCenter);
 
-            // colonne des header de table
-            if (list is List<Forfait>)
+            double x = 50;
+            double y = 140;
+            double width = page.Width - 2 * x; 
+            double height = 20; 
+
+            XFont policeHeader = new XFont("Segoe UI", 12, XFontStyle.Bold);
+            XFont policeCell = new XFont("Segoe UI", 12);
+            if (ficheFrais.Forfaits.Count != 0)
             {
-                PdfPCell cell = new PdfPCell(new Phrase("Date"));
-                cell.BackgroundColor = headerRow;
-                table.AddCell(cell);
+                gfx.DrawString("Forfaits", policeTitre, XBrushes.Black, new XRect(x, y, width, height), XStringFormats.TopLeft);
+                y += height * 2;
+                {
+                    string[] headers = { "Date", "Libellé", "Quantité", "Montant", "Total" };
 
-                //PdfPCell cell = new PdfPCell(new Phrase("Nom"));
-                cell.BackgroundColor = headerRow;
-                table.AddCell(cell);
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        // clairement une formule tirée par les cheveux j'ai dû la trouver sur internet
+                        gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, x + i * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString(headers[i], policeHeader, XBrushes.Black, new XRect(x + i * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
+                    }
+                
+                    // merci internet
+                    foreach (var frais in ficheFrais.Forfaits)
+                    {
+                        y += height;
+                        gfx.DrawRectangle(XPens.Black, x, y, width / headers.Length, height);
+                        gfx.DrawString(frais.Date.ToString(), policeCell, XBrushes.Black, new XRect(x, y, width / headers.Length, height), XStringFormats.Center);
 
-                cell = new PdfPCell(new Phrase("Montant"));
-                cell.BackgroundColor = headerRow;
-                table.AddCell(cell);
+                        gfx.DrawRectangle(XPens.Black, x + width / headers.Length, y, width / headers.Length, height);
+                        gfx.DrawString(frais.Nom, policeCell, XBrushes.Black, new XRect(x + width / headers.Length, y, width / headers.Length, height), XStringFormats.Center);
 
-                cell = new PdfPCell(new Phrase("Quantite"));
-                cell.BackgroundColor = headerRow;
-                table.AddCell(cell);
+                        gfx.DrawRectangle(XPens.Black, x + 2 * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString(frais.Quantite.ToString(), policeCell, XBrushes.Black, new XRect(x + 2 * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
 
-                cell = new PdfPCell(new Phrase("Total"));
-                cell.BackgroundColor = headerRow;
-                table.AddCell(cell);
+                        gfx.DrawRectangle(XPens.Black, x + 3 * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString($"{frais.Montant:F2}", policeCell, XBrushes.Black, new XRect(x + 3 * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
+
+                        gfx.DrawRectangle(XPens.Black, x + 4 * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString($"{frais.Quantite * frais.Montant:F2}", policeCell, XBrushes.Black, new XRect(x + 4 * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
+                    }
+                }
             }
 
-            foreach (object item in list)
+            // l'espace entre les deux tableaux
+            if (ficheFrais.Forfaits.Count != 0)
+                y += height * (ficheFrais.Forfaits.Count + 1) + 20;
+
+            if (ficheFrais.HorsForfaits.Count != 0)
             {
-                PdfPCell cell = new PdfPCell(new Phrase(item.ToString()));
-                table.AddCell(cell);
+                gfx.DrawString("Hors Forfaits", policeTitre, XBrushes.Black, new XRect(x, y, width, height), XStringFormats.TopLeft);
+                y += height * 2;
+                {
+                    string[] headers = { "Date", "Libellé", "Montant" };
+
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        gfx.DrawRectangle(XPens.Black, XBrushes.LightGray, x + i * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString(headers[i], policeHeader, XBrushes.Black, new XRect(x + i * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
+                    }
+
+                    foreach (var frais in ficheFrais.HorsForfaits)
+                    {
+                        y += height;
+                        gfx.DrawRectangle(XPens.Black, x, y, width / headers.Length, height);
+                        gfx.DrawString(frais.Date.ToString(), policeCell, XBrushes.Black, new XRect(x, y, width / headers.Length, height), XStringFormats.Center);
+
+                        gfx.DrawRectangle(XPens.Black, x + width / headers.Length, y, width / headers.Length, height);
+                        gfx.DrawString(frais.Nom, policeCell, XBrushes.Black, new XRect(x + width / headers.Length, y, width / headers.Length, height), XStringFormats.Center);
+
+                        gfx.DrawRectangle(XPens.Black, x + 2 * (width / headers.Length), y, width / headers.Length, height);
+                        gfx.DrawString($"{frais.Montant:F2}", policeCell, XBrushes.Black, new XRect(x + 2 * (width / headers.Length), y, width / headers.Length, height), XStringFormats.Center);
+                    }
+                }
             }
 
-            return table;
-        }
-
-        public static async void ConvertirFicheEnPdf(Data.Modeles.FicheFrais ficheFrais, string cheminFichier, string titre)
-        {
-            string directory = Path.GetDirectoryName(cheminFichier);
-            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-
-            Document document = new Document(PageSize.A4);
-            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(cheminFichier, FileMode.Create));
-            document.Open();
-
-            // Ajouter le titre
+            // Sauvegarder le document PDF
+            var savePicker = new FileSavePicker
             {
-                Font titleFont = FontFactory.GetFont("Sogoe UI", 24, Font.BOLD);
-                Font titleDescript = FontFactory.GetFont("Sogoe UI", 16);
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+            };
+            savePicker.FileTypeChoices.Add("PDF Document", new List<string>() { ".pdf" });
+            savePicker.SuggestedFileName = titre;
 
-                Paragraph p = new Paragraph("Fiche Frais", titleFont);
-                document.Add(p);
-                document.Add(new Paragraph("\n"));
-
-                p = new Paragraph("11 " + ficheFrais.Date.ToString("MMMM yyyy") + " - 10 " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy"), titleDescript);
-                document.Add(p);
-
-                p = new Paragraph("De " + (await LoginService.NomUtilisateur(ficheFrais.IdUtilisateur)) + " - Fiche n°" + ficheFrais.IdFicheFrais + " - Etat fiche : " + ficheFrais.Etat.ToString(), titleDescript);
-                document.Add(p);
-                document.Add(new Paragraph("\n"));
-
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    using (Stream outputStream = stream.AsStreamForWrite())
+                    {
+                        document.Save(outputStream);
+                        outputStream.Flush();
+                    }
+                }
             }
-
-            //document.Add(ConvertListToTablePdf(ficheFrais.Forfaits));
-
-            document.Close();
-
-            OuvrirPdfDansNavigateur(cheminFichier);
-        }
-
-        public static void OuvrirPdfDansNavigateur(string cheminFichier)
-        {
-            Process.Start(cheminFichier);
         }
     }
 }

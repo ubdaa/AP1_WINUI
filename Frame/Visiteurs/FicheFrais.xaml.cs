@@ -11,6 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.NetworkOperators;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -483,7 +484,8 @@ namespace AP1_WINUI.Visiteurs
 
         private void ExpPdfBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            ExportPDF.ConvertirFicheEnPdf(ficheFrais,
+               "Fiche du " + ficheFrais.Date.ToString("MMMM yyyy") + " - " + ficheFrais.Date.AddMonths(1).ToString("MMMM yyyy") + " - " + ficheFrais.IdFicheFrais);
         }
     }
 }
