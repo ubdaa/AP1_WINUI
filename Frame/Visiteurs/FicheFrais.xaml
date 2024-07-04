@@ -26,9 +26,10 @@
                     <CommandBar x:Name="OutilsForfait" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <CommandBar.PrimaryCommands>
                             <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterForfait_Click"/>
+                            <AppBarButton Icon="Delete" Label="Supprimer Note" Click="SupprimerForfait_Click"/>
                             <AppBarSeparator />
-                            <AppBarButton Icon="Edit" Label="Ajouter un justificatif"/>
-                            <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerForfait_Click"/>
+                            <AppBarButton Icon="Edit" Label="Ajouter un justificatif" Click="AjoutJustificatifForfait_Click"/>
+                            <AppBarButton Icon="View" Label="Voir le justificatif" Click="VoirJustificatifForfait_Click"/>
                             <AppBarSeparator />
                         </CommandBar.PrimaryCommands>
                     </CommandBar>
@@ -41,10 +42,11 @@
                     <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Frais hors forfaits" VerticalAlignment="Top" FontSize="30" />
                     <CommandBar x:Name="OutilsHorsForfaits" VerticalAlignment="Top" HorizontalAlignment="Left">
                         <CommandBar.PrimaryCommands>
-                            <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterHorsForfait_Click" />
+                            <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterHorsForfait_Click"/>
+                            <AppBarButton Icon="Delete" Label="Supprimer Note" Click="SupprimerHorsForfait_Click"/>
                             <AppBarSeparator />
-                            <AppBarButton Icon="Edit" Label="Editer"/>
-                            <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerHorsForfait_Click"/>
+                            <AppBarButton Icon="Edit" Label="Ajouter un justificatif" Click="AjouterJustificatifHorsForfait_Click"/>
+                            <AppBarButton Icon="View" Label="Voir le justificatif" Click="VoirJustificatifHorsForfait_Click"/>
                             <AppBarSeparator />
                         </CommandBar.PrimaryCommands>
                     </CommandBar>

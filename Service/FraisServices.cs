@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AP1_WINUI.Data;
 using AP1_WINUI.Data.Modeles;
+using MySqlConnector;
 
 namespace AP1_WINUI.Service
 {
@@ -250,6 +251,68 @@ namespace AP1_WINUI.Service
             }
         }
 
+        public static async Task<bool> AjoutJustificatifForfait(int idForfait, string chemin)
+        {
+            try
+            {
+                string Query = "DELETE FROM justificatif_forfait WHERE id_forfait = @id_forfait";
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_forfait", idForfait } });
+                Data.SQL.Deconnect();
+            } catch
+            {
+                Data.SQL.Deconnect();
+            }
+
+            try
+            {
+                string Query = "INSERT INTO justificatif (chemin) VALUES (@chemin); SELECT LAST_INSERT_ID();"; 
+
+                await Data.SQL.Connect();
+                using (var command = new MySqlCommand(Query, Data.SQL.Connection))
+                {
+                    command.Parameters.AddWithValue("@chemin", chemin);
+                    command.ExecuteNonQuery();
+
+                    long lastInsertedId = command.LastInsertedId;
+
+                    string Query2 = "INSERT justificatif_forfait (id_justificatif, id_forfait) VALUES (@id_justi, @id_chemin)";
+                    await Data.SQL.ExecuteNonRequete(Query2, new Dictionary<string, object> { { "@id_justi", lastInsertedId }, { "@id_chemin", idForfait } });
+                }
+                Data.SQL.Deconnect();
+                return true;
+            } catch
+            {
+                Data.SQL.Deconnect();
+                return false;
+            }
+        }
+
+        public static async Task<string> RecupJustificatifForfait(int idForfait)
+        {
+            string chemin = "";
+            try
+            {
+                string Query = "SELECT chemin FROM justificatif_forfait JOIN justificatif ON justificatif_forfait.id_justificatif = justificatif.id_justificatif WHERE id_forfait = @id_forfait";
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_forfait", idForfait } });
+                if (reader.Read())
+                {
+                    chemin = reader.GetString("chemin");
+                }
+                Data.SQL.Deconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Deconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération du justificatif " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return chemin;
+        }
+
         #endregion
 
         #region HORS FORFAIT
@@ -343,6 +406,70 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
                 return false;
             }
+        }
+
+        public static async Task<bool> AjoutJustificatifHorsForfait(int idHorsForfait, string chemin)
+        {
+            try
+            {
+                string Query = "DELETE FROM justificatif_hors_forfait WHERE id_hors_forfait = @id_hors_forfait";
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_hors_forfait", idHorsForfait } });
+                Data.SQL.Deconnect();
+            }
+            catch
+            {
+                Data.SQL.Deconnect();
+            }
+
+            try
+            {
+                string Query = "INSERT INTO justificatif (chemin) VALUES (@chemin); SELECT LAST_INSERT_ID();";
+
+                await Data.SQL.Connect();
+                using (var command = new MySqlCommand(Query, Data.SQL.Connection))
+                {
+                    command.Parameters.AddWithValue("@chemin", chemin);
+                    command.ExecuteNonQuery();
+
+                    long lastInsertedId = command.LastInsertedId;
+
+                    string Query2 = "INSERT justificatif_hors_forfait (id_justificatif, id_hors_forfait) VALUES (@id_justi, @id_chemin)";
+                    await Data.SQL.ExecuteNonRequete(Query2, new Dictionary<string, object> { { "@id_justi", lastInsertedId }, { "@id_chemin", idHorsForfait } });
+                }
+                Data.SQL.Deconnect();
+                return true;
+            }
+            catch
+            {
+                Data.SQL.Deconnect();
+                return false;
+            }
+        }
+
+        public static async Task<string> RecupJustificatifHorsForfait(int idHorsForfait)
+        {
+            string chemin = "";
+            try
+            {
+                string Query = "SELECT chemin FROM justificatif_hors_forfait JOIN justificatif ON justificatif_hors_forfait.id_justificatif = justificatif.id_justificatif WHERE id_hors_forfait = @id_hors_forfait";
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_hors_forfait", idHorsForfait } });
+                if (reader.Read())
+                {
+                    chemin = reader.GetString("chemin");
+                }
+                Data.SQL.Deconnect();
+            }
+            catch (Exception e)
+            {
+                Data.SQL.Deconnect();
+
+                var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération du justificatif " + e.Message, "Erreur");
+                await dialog.ShowAsync();
+
+                return null;
+            }
+
+            return chemin;
         }
 
         #endregion

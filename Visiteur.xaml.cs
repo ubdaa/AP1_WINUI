@@ -75,7 +75,16 @@ namespace AP1_WINUI
             // dans le cas où on a rien trouvé
             if (fiche == null)
             {
-                fiche = await FraisServices.CreationFicheFrais(user.IdUtilisateur, new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11));
+                DateTime date;
+                if (DateTime.Now.Day >= 11)
+                {
+                    date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11);
+                }
+                else
+                {
+                    date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 11).AddMonths(-1);
+                }
+                fiche = await FraisServices.CreationFicheFrais(user.IdUtilisateur, date);
                 user.FicheFrais.Add(fiche);
             }
 

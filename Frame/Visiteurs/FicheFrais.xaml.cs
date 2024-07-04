@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Networking.NetworkOperators;
+using Windows.Storage;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -121,6 +122,42 @@ namespace AP1_WINUI.Visiteurs
             datagridForfait.SelectedIndex = -1;
         }
 
+        private async void AjoutJustificatifForfait()
+        {
+            var forfait = (Forfait)datagridForfait.SelectedItem;
+
+            if (forfait == null)
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Aucun forfait n'a été sélectionné", "Erreur");
+                await dialog.ShowAsync();
+                return;
+            }
+
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".pdf");
+            picker.CommitButtonText = "Ajouter";
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                if (await Service.FraisServices.AjoutJustificatifForfait(forfait.IdForfait, file.Path))
+                {
+                    var dialog = new Windows.UI.Popups.MessageDialog("Justificatif ajouté avec succès", "Succès");
+                    await dialog.ShowAsync();
+                }
+                else
+                {
+                    var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du justificatif", "Erreur");
+                    await dialog.ShowAsync();
+                }
+            }
+        }
+
         private void ChargerForfait()
         {
             datagridForfait.ItemsSource = null;
@@ -204,6 +241,42 @@ namespace AP1_WINUI.Visiteurs
             }
 
             datagridHorsForfait.SelectedIndex = -1;
+        }
+
+        private async void AjoutJustificatifHorsForfait()
+        {
+            var horsForfait = (HorsForfait)datagridHorsForfait.SelectedItem;
+
+            if (horsForfait == null)
+            {
+                var dialog = new Windows.UI.Popups.MessageDialog("Aucun hors forfait n'a été sélectionné", "Erreur");
+                await dialog.ShowAsync();
+                return;
+            }
+
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".pdf");
+            picker.CommitButtonText = "Ajouter";
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                if (await Service.FraisServices.AjoutJustificatifHorsForfait(horsForfait.IdHorsForfait, file.Path))
+                {
+                    var dialog = new Windows.UI.Popups.MessageDialog("Justificatif ajouté avec succès", "Succès");
+                    await dialog.ShowAsync();
+                }
+                else
+                {
+                    var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du justificatif", "Erreur");
+                    await dialog.ShowAsync();
+                }
+            }
         }
 
         private void ChargerHorsForfait()
@@ -312,6 +385,28 @@ namespace AP1_WINUI.Visiteurs
             SupprimerFraisForfait();
         }
 
+        private void AjoutJustificatifForfait_Click(object sender, RoutedEventArgs e)
+        {
+            AjoutJustificatifForfait();
+        }
+
+        private async void VoirJustificatifForfait_Click(object sender, RoutedEventArgs e)
+        {
+            var forfait = (Forfait)datagridForfait.SelectedItem;
+
+            string chemin = await Service.FraisServices.RecupJustificatifForfait(forfait.IdForfait);
+
+            if (string.IsNullOrEmpty(chemin))
+            {
+                var erreur = new Windows.UI.Popups.MessageDialog("Aucun justificatif n'a été ajouté", "Erreur");
+                await erreur.ShowAsync();
+                return;
+            }
+
+            StorageFile fichier = await StorageFile.GetFileFromPathAsync(chemin);
+            await Launcher.LaunchFileAsync(fichier);
+        }
+
         private void datagridForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
             e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
@@ -380,6 +475,28 @@ namespace AP1_WINUI.Visiteurs
         private void SupprimerHorsForfait_Click(object sender, RoutedEventArgs e)
         {
             SupprimerFraisHorsForfait();
+        }
+
+        private async void AjouterJustificatifHorsForfait_Click(object sender, RoutedEventArgs e)
+        {
+            AjoutJustificatifHorsForfait();
+        }
+
+        private async void VoirJustificatifHorsForfait_Click(object sender, RoutedEventArgs e)
+        {
+            var horsForfait = (HorsForfait)datagridHorsForfait.SelectedItem;
+
+            string chemin = await Service.FraisServices.RecupJustificatifHorsForfait(horsForfait.IdHorsForfait);
+
+            if (string.IsNullOrEmpty(chemin))
+            {
+                var erreur = new Windows.UI.Popups.MessageDialog("Aucun justificatif n'a été ajouté", "Erreur");
+                await erreur.ShowAsync();
+                return;
+            }
+
+            StorageFile fichier = await StorageFile.GetFileFromPathAsync(chemin);
+            await Launcher.LaunchFileAsync(fichier);
         }
 
         private void datagridHorsForfait_AutoGeneratingColumn(object sender, Microsoft.Toolkit.Uwp.UI.Controls.DataGridAutoGeneratingColumnEventArgs e)
