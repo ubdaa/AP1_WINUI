@@ -34,19 +34,19 @@ namespace AP1_WINUI.Data
 
         }
 
-        public static void Disconnect()
+        public static void Deconnect()
         {
             Connection.Close();
         }
 
-        public static async Task<MySqlDataReader> ExecuteQuery(string query, Dictionary<string, object> parameters = null)
+        public static async Task<MySqlDataReader> ExecuteRequete(string requete, Dictionary<string, object> parametres = null)
         {
             await Connect();
-            MySqlCommand cmd = new MySqlCommand(query, Connection);
+            MySqlCommand cmd = new MySqlCommand(requete, Connection);
 
-            if (parameters != null)
+            if (parametres != null)
             {
-                foreach (var param in parameters)
+                foreach (var param in parametres)
                 {
                     cmd.Parameters.AddWithValue(param.Key, param.Value);
                 }
@@ -57,15 +57,15 @@ namespace AP1_WINUI.Data
             return reader;
         }
 
-        public static async Task<int> ExecuteNonQuery(string query, Dictionary<string, object> parameters = null)
+        public static async Task<int> ExecuteNonRequete(string requete, Dictionary<string, object> parametres = null)
         {
             await Connect();
 
-            MySqlCommand cmd = new MySqlCommand(query, Connection);
+            MySqlCommand cmd = new MySqlCommand(requete, Connection);
 
-            if (parameters != null)
+            if (parametres != null)
             {
-                foreach (var param in parameters)
+                foreach (var param in parametres)
                 {
                     cmd.Parameters.AddWithValue(param.Key, param.Value);
                 }

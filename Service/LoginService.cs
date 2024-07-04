@@ -15,7 +15,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string query = "SELECT * FROM utilisateur WHERE username = @username AND mdp = @password";
-                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@username", username }, { "@password", password } });
+                var reader = await Data.SQL.ExecuteRequete(query, new Dictionary<string, object> { { "@username", username }, { "@password", password } });
 
                 if (reader.Read())
                 {
@@ -40,7 +40,7 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
             }
 
-            Data.SQL.Disconnect();
+            Data.SQL.Deconnect();
             return user;
         }
 
@@ -50,7 +50,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string query = "SELECT * FROM utilisateur WHERE id_utilisateur = @id";
-                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
+                var reader = await Data.SQL.ExecuteRequete(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
                 if (reader.Read())
                 {
                     var utilisateur = new Utilisateur
@@ -74,7 +74,7 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
             }
 
-            Data.SQL.Disconnect();
+            Data.SQL.Deconnect();
             return user;
         }
 
@@ -84,7 +84,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur";
-                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id_utilisateur", user.IdUtilisateur } });
+                var reader = await Data.SQL.ExecuteRequete(query, new Dictionary<string, object> { { "@id_utilisateur", user.IdUtilisateur } });
                 user.FicheFrais = new List<FicheFrais>();
                 while (reader.Read())
                 {
@@ -99,12 +99,12 @@ namespace AP1_WINUI.Service
 
                     user.FicheFrais.Add(fiche);
                 } 
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return user;
             }
             catch
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des fiches", "Erreur lors de la connexion");
                 await dialog.ShowAsync();
                 return null;
@@ -118,10 +118,10 @@ namespace AP1_WINUI.Service
                 Utilisateur user = null;
 
                 user = await UtilisateurBase(username, password);
-                if (user == null) { Data.SQL.Disconnect(); return null; }
+                if (user == null) { Data.SQL.Deconnect(); return null; }
 
                 user = await RecupFicheFrais(user);
-                if (user == null) { Data.SQL.Disconnect(); return null; }
+                if (user == null) { Data.SQL.Deconnect(); return null; }
 
                 return user;
             }
@@ -136,7 +136,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string query = "SELECT username FROM utilisateur WHERE id_utilisateur = @id";
-                var reader = await Data.SQL.ExecuteQuery(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
+                var reader = await Data.SQL.ExecuteRequete(query, new Dictionary<string, object> { { "@id", idUtilisateur } });
                 if (reader.Read())
                 {
                     nom = reader.GetString("username");
@@ -152,7 +152,7 @@ namespace AP1_WINUI.Service
                 await dialog.ShowAsync();
             }
 
-            Data.SQL.Disconnect();
+            Data.SQL.Deconnect();
             return nom;
         }
     }

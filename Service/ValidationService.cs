@@ -15,7 +15,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "SELECT * FROM fiche_de_frais WHERE etat = @etat";
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@etat", 1 } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@etat", 1 } });
 
                 while (reader.Read())
                 {
@@ -32,13 +32,13 @@ namespace AP1_WINUI.Service
                     fichesFrais.Add(ficheFrais);
                 }
 
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
             } 
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
 
             return fichesFrais;
@@ -49,21 +49,21 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "UPDATE fiche_de_frais SET etat = @etat WHERE id_fiche = @id_fiche";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etat }, { "@id_fiche", idFiche } });
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@etat", etat }, { "@id_fiche", idFiche } });
 
                 Query = "UPDATE forfait SET etat = @etat WHERE fiche_frais = @id_fiche";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
 
                 Query = "UPDATE hors_forfait SET etat = @etat WHERE fiche_frais = @id_fiche";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@etat", etatFrais }, { "@id_fiche", idFiche } });
 
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return false;
             }
         }

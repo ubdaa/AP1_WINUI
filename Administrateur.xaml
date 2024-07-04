@@ -16,7 +16,7 @@
         <muxc:NavigationView Grid.Row="1" x:Name="nvVisit"  PaneDisplayMode="Left" SelectionChanged="nvVisit_SelectionChanged" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Content="Gestion utilisateurs" Icon="Contact"/>
-                <muxc:NavigationViewItem Content="Gestion type de frais" Icon="Flag" />
+                <muxc:NavigationViewItem Content="Gestion type de frais" Icon="Flag" Visibility="Collapsed" />
                 <muxc:NavigationViewItem Content="Se déconnecter" Icon="Import"/>
             </muxc:NavigationView.MenuItems>
             <Frame x:Name="contentFrame"/>

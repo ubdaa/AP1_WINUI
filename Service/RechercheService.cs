@@ -16,7 +16,7 @@ namespace AP1_WINUI.Service
 
             try
             {
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@username", recherche } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@username", recherche } });
 
                 while (reader.Read())
                 {
@@ -33,13 +33,13 @@ namespace AP1_WINUI.Service
                     utilisateurs.Add(utilisateur);
                 }
 
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return utilisateurs;
             } 
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return null;
             }
         }

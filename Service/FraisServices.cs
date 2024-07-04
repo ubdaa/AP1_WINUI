@@ -19,7 +19,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "SELECT * FROM fiche_de_frais WHERE utilisateur = @id_utilisateur AND date_fiche = @date";
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_utilisateur", idUtilisateur }, { "@date", date } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_utilisateur", idUtilisateur }, { "@date", date } });
                 if (reader.Read())
                 {
                     ficheFrais.IdFicheFrais = reader.GetInt32("id_fiche");
@@ -29,11 +29,11 @@ namespace AP1_WINUI.Service
                     ficheFrais.Forfaits = await RecupForfait(ficheFrais.IdFicheFrais);
                     ficheFrais.HorsForfaits = await RecupHorsForfait(ficheFrais.IdFicheFrais);
                 }
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération de la fiche de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -51,7 +51,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "SELECT * FROM fiche_de_frais WHERE id_fiche = @id_fiche";
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
                 if (reader.Read())
                 {
                     ficheFrais.IdFicheFrais = reader.GetInt32("id_fiche");
@@ -61,11 +61,11 @@ namespace AP1_WINUI.Service
                     ficheFrais.Forfaits = await RecupForfait(ficheFrais.IdFicheFrais);
                     ficheFrais.HorsForfaits = await RecupHorsForfait(ficheFrais.IdFicheFrais);
                 }
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération de la fiche de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -81,12 +81,12 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "UPDATE fiche_de_frais SET etat = @etat WHERE etat = @etat2";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@etat", EtatFiche.ATTENTE }, { "@etat2", EtatFiche.COURS } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@etat", EtatFiche.ATTENTE }, { "@etat2", EtatFiche.COURS } });
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification de l'état de la fiche de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -102,12 +102,12 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "INSERT INTO fiche_de_frais (date_fiche, utilisateur, etat) VALUES (@date, @utilisateur, @etat)";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@date", date }, { "@utilisateur", userName }, { "@etat", EtatFiche.COURS } } );
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@date", date }, { "@utilisateur", userName }, { "@etat", EtatFiche.COURS } } );
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la création de la fiche de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -126,7 +126,7 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "SELECT * FROM type_frais";
-                var reader = await Data.SQL.ExecuteQuery(Query);
+                var reader = await Data.SQL.ExecuteRequete(Query);
                 while (reader.Read())
                 {
                     typeFrais.Add(new TypeFrais
@@ -136,11 +136,11 @@ namespace AP1_WINUI.Service
                         Montant = reader.GetDouble("cout")
                     });
                 }
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des types de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -159,13 +159,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "INSERT INTO forfait (type_forfait, etat, date, fiche_frais, quantite) VALUES (@id_type_forfait, @etat, @date, @fiche_frais, @quantite)";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_type_forfait", idTypeFrais }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@fiche_frais", idFiche }, { "@quantite", 0 } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_type_forfait", idTypeFrais }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@fiche_frais", idFiche }, { "@quantite", 0 } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -183,7 +183,7 @@ namespace AP1_WINUI.Service
 
             try
             {
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
                 while (reader.Read())
                 {
                     forfaits.Add(new Forfait
@@ -197,11 +197,11 @@ namespace AP1_WINUI.Service
                         Montant = typeFrais.Find(x => x.IdTypeFrais == reader.GetInt32("type_forfait")).Montant,
                     });
                 }
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des forfaits " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -217,13 +217,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "DELETE FROM forfait WHERE id_forfait = @id_forfait";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_forfait", idForfait } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_forfait", idForfait } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression du forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -236,13 +236,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "UPDATE forfait SET quantite = @quantite WHERE id_forfait = @id_forfait";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@quantite", quantite }, { "@id_forfait", idForfait } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@quantite", quantite }, { "@id_forfait", idForfait } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification du forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -259,13 +259,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "INSERT INTO hors_forfait (nom, etat, date, montant, fiche_frais) VALUES (@nom, @etat, @date, @montant, @fiche_frais)";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@nom", nom }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@montant", montant }, { "@fiche_frais", idFiche } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@nom", nom }, { "@etat", EtatNote.ATTENTE }, { "@date", date }, { "@montant", montant }, { "@fiche_frais", idFiche } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout du hors forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
                 return false;
@@ -280,7 +280,7 @@ namespace AP1_WINUI.Service
 
             try
             {
-                var reader = await Data.SQL.ExecuteQuery(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
+                var reader = await Data.SQL.ExecuteRequete(Query, new Dictionary<string, object> { { "@id_fiche", idFiche } });
                 while (reader.Read())
                 {
                     horsForfaits.Add(new HorsForfait
@@ -292,11 +292,11 @@ namespace AP1_WINUI.Service
                         Montant = reader.GetDouble("montant")
                     });
                 }
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération des hors forfaits " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -312,13 +312,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "DELETE FROM hors_forfait WHERE id_hors_forfait = @id_hors_forfait";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_hors_forfait", idHorsForfait } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_hors_forfait", idHorsForfait } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression du hors forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -331,13 +331,13 @@ namespace AP1_WINUI.Service
             try
             {
                 string Query = "UPDATE hors_forfait SET montant = @montant WHERE id_hors_forfait = @id_hors_forfait";
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@montant", montant }, { "@id_hors_forfait", idHorsForfait } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@montant", montant }, { "@id_hors_forfait", idHorsForfait } });
+                Data.SQL.Deconnect();
                 return true;
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification du hors forfait " + e.Message, "Erreur");
                 await dialog.ShowAsync();

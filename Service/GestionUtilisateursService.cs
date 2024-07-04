@@ -17,7 +17,7 @@ namespace AP1_WINUI.Service
 
             try
             {
-                var reader = await Data.SQL.ExecuteQuery(Query);
+                var reader = await Data.SQL.ExecuteRequete(Query);
 
                 while (reader.Read())
                 {
@@ -32,12 +32,12 @@ namespace AP1_WINUI.Service
                     utilisateurs.Add(utilisateur);
                 };
 
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
                 return utilisateurs;
             } 
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la récupération de la fiche de frais " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -51,12 +51,12 @@ namespace AP1_WINUI.Service
 
             try
             { 
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role } });
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de l'ajout de l'utilisateur " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -69,12 +69,12 @@ namespace AP1_WINUI.Service
 
             try
             {
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@id_utilisateur", utilisateur.IdUtilisateur } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@id_utilisateur", utilisateur.IdUtilisateur } });
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la suppression de l'utilisateur " + e.Message, "Erreur");
                 await dialog.ShowAsync();
@@ -87,12 +87,12 @@ namespace AP1_WINUI.Service
 
             try
             {
-                await Data.SQL.ExecuteNonQuery(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role }, { "@id_utilisateur", utilisateur.IdUtilisateur } });
-                Data.SQL.Disconnect();
+                await Data.SQL.ExecuteNonRequete(Query, new Dictionary<string, object> { { "@username", utilisateur.Username }, { "@mdp", utilisateur.Password }, { "@id_role", (int)utilisateur.Role }, { "@id_utilisateur", utilisateur.IdUtilisateur } });
+                Data.SQL.Deconnect();
             }
             catch (Exception e)
             {
-                Data.SQL.Disconnect();
+                Data.SQL.Deconnect();
 
                 var dialog = new Windows.UI.Popups.MessageDialog("Erreur lors de la modification de l'utilisateur " + e.Message, "Erreur");
                 await dialog.ShowAsync();

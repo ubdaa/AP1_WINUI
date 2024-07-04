@@ -44,6 +44,9 @@ namespace AP1_WINUI
         public Administrateur()
         {
             this.InitializeComponent();
+
+            nvVisit.SelectedItem = nvVisit.MenuItems[0];
+            contentFrame.Navigate(typeof(Administrateurs.GestionUtilisateurs));
         }
     }
 }
