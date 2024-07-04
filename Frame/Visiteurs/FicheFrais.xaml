@@ -27,7 +27,7 @@
                         <CommandBar.PrimaryCommands>
                             <AppBarButton Icon="Add" Label="Ajouter Note" Click="AjouterForfait_Click"/>
                             <AppBarSeparator />
-                            <AppBarButton Icon="Edit" Label="Editer"/>
+                            <AppBarButton Icon="Edit" Label="Ajouter un justificatif"/>
                             <AppBarButton Icon="Delete" Label="Supprimer" Click="SupprimerForfait_Click"/>
                             <AppBarSeparator />
                         </CommandBar.PrimaryCommands>
